@@ -37,13 +37,13 @@
   
     <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
     
-    <!-- WRONG IMAGE
+    <!--
     <script>
       const fileUpload = document.getElementById("fileUpload");
       fileUpload.addEventListener("change", handleFiles, false);
 
       function handleFiles(){
-        let fileD = this.files[0];
+        let fileD = fileUpload.files[0]
         console.log("The file name is: " + fileD.name)
         console.log("The file size is: " + fileD.size + " bytes.")
 
@@ -65,7 +65,7 @@
       }
     </script>
     -->
-
+  
     <script>
       const fileUpload = document.getElementById("fileUpload");
       const loader = document.getElementById("loadingView");
@@ -108,7 +108,6 @@
           element.classList.add("invisible-view");
       }
     </script>
-
 
 
 </html>
