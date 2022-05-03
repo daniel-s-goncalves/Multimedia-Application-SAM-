@@ -12,7 +12,8 @@
       <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
   </head>
 
-  <body class="d-flex h-100 text-center text-white bg-dark">
+  <body class="row h-100 text-center text-white bg-dark">
+    <div class="col-7">
       <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
         <header class="mb-auto text-center">
           <h3>Image Editor</h3>
@@ -45,7 +46,7 @@
             </div> 
             <div class="row mb-3 text-start">
               <label for="saturationM" class="form-label mb-1">Sharpness</label>
-              <input type="range" class="form-range editor-b" min="-100" max="100" step="1" id="sharpnessM">
+              <input type="range" class="form-range editor-b" min="0" max="15" step="1" value="0" id="sharpnessM">
             </div>
           </div>
         </main>
@@ -54,9 +55,12 @@
           <p>SAM | FEUP | 2022</p>
         </footer>
       </div>
+    </div>
+    <div class="col-5" id="containingBox" style="background-color: #282d32; padding: 50px !important;">
       <img id="imageDisplay" src="#" alt="Preview Image" class="visually-hidden m-auto" style="height: 60vh;"/>
       <canvas width="400" height="300" id="canvas" class="visually-hidden m-auto"/>
-    </body>
+    </div>
+  </body>
   
     <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
   
@@ -72,6 +76,9 @@
       let defaultImageData = new ImageData(2,2);
       fileUpload.addEventListener("change", displayImage, false);
 
+      let imageWidth = 0;
+      let imageHeight = 0;
+
       function displayImage(){
         let imageFile = this.files[0];
         displayElement(fileUpload, false)
@@ -81,14 +88,46 @@
         
         let imageObject = new Image;
         imageObject.onload = function(){
-            canvasContext.drawImage(imageObject,0,0);
+            determineCanvasDimension(imageObject.width, imageObject.height)
+            canvasContext.drawImage(imageObject, 0, 0);
             displayElement(loader, false)
             displayElement(canvasObject, true)
             displayElement(UID1, false)
             displayElement(UID2, true)
-            defaultImageData = canvasContext.getImageData(0, 0, 400, 300);
+            defaultImageData = canvasContext.getImageData(0, 0, canvasObject.width, canvasObject.height);
         }
         imageObject.src = URL.createObjectURL(imageFile);
+      }
+
+      function determineCanvasDimension(width, height){
+        let maxWidth = document.getElementById("containingBox").clientWidth - 50 * 2;
+        let maxHeight = document.getElementById("containingBox").clientHeight - 50 * 2;
+        let ratio = width / (height * 1.0);
+
+        if(width > height){
+          if(width > maxWidth){
+            canvasObject.width = maxWidth;
+            canvasObject.height = maxWidth / ratio;
+          }
+          else{
+            canvasObject.width = width * 0.75;
+            canvasObject.height = canvasObject.width / ratio;
+          }
+        }
+        else{
+          if(height > maxHeight){
+            canvasObject.height = maxHeight;
+            canvasObject.width = maxHeight * ratio;
+          }
+          else{
+            canvasObject.height = height * 0.75;
+            canvasObject.width = canvasObject.height * ratio;
+          }
+        }
+
+        // Assign for global use
+        imageWidth = width;
+        imageHeight = height;
       }
 
       function displayElement(element, showOnScreen){
@@ -105,7 +144,7 @@
       // Editor
       const editorBs = document.getElementsByClassName("editor-b")
       for(let i = 0; i < editorBs.length; i++)
-        editorBs[i].addEventListener("change", executeChanges)
+        editorBs[i].addEventListener("input", executeChanges)
       // ////////////////////////////////////////////////////////////////
 
       // Sliders
@@ -116,56 +155,47 @@
       // ////////////////////////////////////////////////////////////////
 
 
-      // Image Object
-      let canvasImgData = undefined;
-      // ///////////////////////////////////////////////////////////////
+      // Give in the Filters to Caman
+      Caman.Filter.register("threshold", function (limit){
+          this.process("threshold", function (rgba) {
+              var lumin = (0.2126 * rgba.r) + (0.7152 * rgba.g) + (0.0722 * rgba.b);
+              rgba.r = lumin > limit ? 255 : 0;
+              rgba.g = lumin > limit ? 255 : 0;
+              rgba.b = lumin > limit ? 255 : 0;
+          });
+          return this;
+      });
+
+      Caman.Filter.register("grayscale", function () {
+          this.process("grayscale", function (rgba) {
+              var lumin = (0.2126 * rgba.r) + (0.7152 * rgba.g) + (0.0722 * rgba.b);
+              rgba.r = lumin;
+              rgba.g = lumin;
+              rgba.b = lumin;
+          });
+          return this;
+      });
+      // /////////////////////////////////////////////////////////////////////////////
+      
+
       function executeChanges(){
-        /*// Set-Up default Image Data - Deep copy
-        canvasImgData = canvasContext.getImageData(0, 0, 400, 300);
-        copyImageData(defaultImageData, canvasImgData);
-
-        changeContrast(contrastO.value);
-        canvasContext.putImageData(canvasImgData, 0, 0);*/
-
-      }
-
-      function changeContrast(value){
-        let data = canvasImgData.data;
-        value = (value / 100) + 1;  // Convert to decimal & shift range: [0..2]
-        let intercept = 128 * (1 - value);
-        for(let i = 0; i < data.length; i += 4){   //r,g,b,a
-            data[i] = data[i] * value + intercept;
-            data[i+1] = data[i+1] * value + intercept;
-            data[i+2] = data[i+2] * value + intercept;
-        }
-      }
-
-      function changeBrightness(value){
-        return true;
-      }
-
-      function copyImageData(sourceData, destData){
-        if( !(sourceData.width == destData.width && sourceData.height == destData.height) ){
-          console.error("This method was called, but both ImageDatas have different types.")
-          return;
-        }
-
-        for(let i = 0; i < sourceData.data.length; i += 4){
-            destData.data[i] = sourceData.data[i];
-            destData.data[i+1] = sourceData.data[i+1];
-            destData.data[i+2] = sourceData.data[i+2];
-            destData.data[i+3] = sourceData.data[i+3];
-        }
-      }
-
-      /*
         Caman("#canvas", function(){
           this.revert(false);
-          this.brightness( brightnessO.value );
-          this.contrast( contrastO.value );
-          this.saturation( saturationO.value );
+
+          if( parseInt(brightnessO.value) !== 0 )
+            this.brightness( parseInt(brightnessO.value) );
+          
+          if( parseInt(contrastO.value) !== 0 )
+            this.contrast( parseInt(contrastO.value) );
+
+          if( parseInt(saturationO.value) !== 0 )
+            this.saturation( parseInt(saturationO.value) );
+
+          if( parseInt(sharpnessO.value) !== 0 )
+            this.sharpen( parseInt(sharpnessO.value) );
+          
           this.render();
-        });*/
-      
+        });
+      }
     </script>
 </html>
