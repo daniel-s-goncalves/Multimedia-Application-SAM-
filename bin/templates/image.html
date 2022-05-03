@@ -59,47 +59,18 @@
     </body>
   
     <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
-    
-    <!--
-    <script>
-      const fileUpload = document.getElementById("fileUpload");
-      fileUpload.addEventListener("change", handleFiles, false);
-
-      function handleFiles(){
-        let fileD = fileUpload.files[0]
-        console.log("The file name is: " + fileD.name)
-        console.log("The file size is: " + fileD.size + " bytes.")
-
-        let formData = new FormData();
-        formData.append("file", fileD);
-
-        console.log(fileD)
-
-        // Send Request
-        var httpRequest = new XMLHttpRequest();
-        httpRequest.open("POST", '/imageEditor', true);
-        //httpRequest.setRequestHeader("Content-Type", "multipart/form-data");
-        httpRequest.onreadystatechange = function(){ 
-            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                console.log("Terminated. Please, read from Server console to check the data sent.")
-            }
-        }
-        httpRequest.send(formData);
-      }
-    </script>
-    -->
   
     <script>
       const fileUpload = document.getElementById("fileUpload");
       const loader = document.getElementById("loadingView");
       const imageDisplay = document.getElementById("imageDisplay");
       const canvasObject = document.getElementById("canvas");
+      const canvasContext = canvasObject.getContext('2d');
 
-      const UID1 = document.getElementById("mainBox")
-      const UID2 = document.getElementById("editBox")
+      const UID1 = document.getElementById("mainBox");
+      const UID2 = document.getElementById("editBox");
+      let defaultImageData = new ImageData(2,2);
       fileUpload.addEventListener("change", displayImage, false);
-
-      let imageValue = [];
 
       function displayImage(){
         let imageFile = this.files[0];
@@ -108,14 +79,14 @@
         console.log("The file name is: " + imageFile.name)
         console.log("The file size is: " + imageFile.size + " bytes.")
         
-        let context = canvasObject.getContext('2d');
         let imageObject = new Image;
         imageObject.onload = function(){
-            context.drawImage(imageObject,0,0);
+            canvasContext.drawImage(imageObject,0,0);
             displayElement(loader, false)
             displayElement(canvasObject, true)
             displayElement(UID1, false)
             displayElement(UID2, true)
+            defaultImageData = canvasContext.getImageData(0, 0, 400, 300);
         }
         imageObject.src = URL.createObjectURL(imageFile);
       }
@@ -129,13 +100,12 @@
     </script>
     
     <script type="text/javascript" src="{{ url_for('static', filename='caman.full.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='tui-image-editor.js') }}"></script>
 
     <script>
       // Editor
       const editorBs = document.getElementsByClassName("editor-b")
       for(let i = 0; i < editorBs.length; i++)
-        editorBs[i].addEventListener("change", assignContrast.bind())
+        editorBs[i].addEventListener("change", executeChanges)
       // ////////////////////////////////////////////////////////////////
 
       // Sliders
@@ -145,13 +115,57 @@
       const sharpnessO = document.getElementById("sharpnessM");
       // ////////////////////////////////////////////////////////////////
 
-      function assignContrast(){
+
+      // Image Object
+      let canvasImgData = undefined;
+      // ///////////////////////////////////////////////////////////////
+      function executeChanges(){
+        /*// Set-Up default Image Data - Deep copy
+        canvasImgData = canvasContext.getImageData(0, 0, 400, 300);
+        copyImageData(defaultImageData, canvasImgData);
+
+        changeContrast(contrastO.value);
+        canvasContext.putImageData(canvasImgData, 0, 0);*/
+
+      }
+
+      function changeContrast(value){
+        let data = canvasImgData.data;
+        value = (value / 100) + 1;  // Convert to decimal & shift range: [0..2]
+        let intercept = 128 * (1 - value);
+        for(let i = 0; i < data.length; i += 4){   //r,g,b,a
+            data[i] = data[i] * value + intercept;
+            data[i+1] = data[i+1] * value + intercept;
+            data[i+2] = data[i+2] * value + intercept;
+        }
+      }
+
+      function changeBrightness(value){
+        return true;
+      }
+
+      function copyImageData(sourceData, destData){
+        if( !(sourceData.width == destData.width && sourceData.height == destData.height) ){
+          console.error("This method was called, but both ImageDatas have different types.")
+          return;
+        }
+
+        for(let i = 0; i < sourceData.data.length; i += 4){
+            destData.data[i] = sourceData.data[i];
+            destData.data[i+1] = sourceData.data[i+1];
+            destData.data[i+2] = sourceData.data[i+2];
+            destData.data[i+3] = sourceData.data[i+3];
+        }
+      }
+
+      /*
         Caman("#canvas", function(){
+          this.revert(false);
           this.brightness( brightnessO.value );
           this.contrast( contrastO.value );
           this.saturation( saturationO.value );
           this.render();
-        });
-      }
+        });*/
+      
     </script>
 </html>
