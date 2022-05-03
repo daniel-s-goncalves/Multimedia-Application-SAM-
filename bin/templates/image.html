@@ -19,11 +19,34 @@
         </header>
       
         <main class="px-3">
-          <h1>Upload Image.</h1>
-          <p class="lead">Try uploading an image and see how the server responds.</p>
-          <div class="mb-3">
-            <input class="form-control" style="width: 50%; margin: auto;" type="file" id="fileUpload">
-            <div id="loadingView" class="spinner-border invisible-view" role="status"></div>
+          <div id="mainBox">
+            <h1>Upload Image.</h1>
+            <p class="lead">Try uploading an image and see how the server responds.</p>
+            <div class="mb-3">
+              <input class="form-control" style="width: 50%; margin: auto;" type="file" id="fileUpload">
+              <div id="loadingView" class="spinner-border visually-hidden" role="status"></div>
+            </div>
+          </div>
+
+          <div id="editBox" class="visually-hidden">
+            <h1>Image uploaded</h1>
+            <p class="lead">Please, tweak the settings bellow.</p>
+            <div class="row mb-3 text-start">
+              <label for="saturationM" class="form-label mb-1">Brightness</label>
+              <input type="range" class="form-range editor-b" min="-100" max="100" step="1" id="brightnessM">
+            </div> 
+            <div class="row mb-3 text-start mt-4">
+              <label for="contrastM" class="form-label mb-1">Contrast</label>
+              <input type="range" class="form-range editor-b" min="-100" max="100" step="1" id="contrastM">
+            </div>
+            <div class="row mb-3 text-start">
+                <label for="saturationM" class="form-label mb-1">Saturation</label>
+                <input type="range" class="form-range editor-b" min="-100" max="100" step="1" id="saturationM">
+            </div> 
+            <div class="row mb-3 text-start">
+              <label for="saturationM" class="form-label mb-1">Sharpness</label>
+              <input type="range" class="form-range editor-b" min="-100" max="100" step="1" id="sharpnessM">
+            </div>
           </div>
         </main>
       
@@ -31,8 +54,8 @@
           <p>SAM | FEUP | 2022</p>
         </footer>
       </div>
-      <img id="imageDisplay" src="#" alt="Preview Image" class="invisible-view m-auto" style="height: 60vh;"/>
-      <canvas width="400" height="300" id="canvas" class="invisible-view m-auto"/>
+      <img id="imageDisplay" src="#" alt="Preview Image" class="visually-hidden m-auto" style="height: 60vh;"/>
+      <canvas width="400" height="300" id="canvas" class="visually-hidden m-auto"/>
     </body>
   
     <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
@@ -71,7 +94,12 @@
       const loader = document.getElementById("loadingView");
       const imageDisplay = document.getElementById("imageDisplay");
       const canvasObject = document.getElementById("canvas");
+
+      const UID1 = document.getElementById("mainBox")
+      const UID2 = document.getElementById("editBox")
       fileUpload.addEventListener("change", displayImage, false);
+
+      let imageValue = [];
 
       function displayImage(){
         let imageFile = this.files[0];
@@ -86,28 +114,44 @@
             context.drawImage(imageObject,0,0);
             displayElement(loader, false)
             displayElement(canvasObject, true)
+            displayElement(UID1, false)
+            displayElement(UID2, true)
         }
         imageObject.src = URL.createObjectURL(imageFile);
-        /*
-        let reader = new FileReader();
-        reader.onload = function(){
-          let dataURL = reader.result;
-          let output = document.getElementById('imageDisplay');
-          displayElement(loader, false)
-          displayElement(output, true);
-          output.src = dataURL;
-        };
-        reader.readAsDataURL(imageFile);
-        */
       }
 
       function displayElement(element, showOnScreen){
         if(showOnScreen)
-          element.classList.remove("invisible-view");
+          element.classList.remove("visually-hidden");
         else
-          element.classList.add("invisible-view");
+          element.classList.add("visually-hidden");
       }
     </script>
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='caman.full.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='tui-image-editor.js') }}"></script>
 
+    <script>
+      // Editor
+      const editorBs = document.getElementsByClassName("editor-b")
+      for(let i = 0; i < editorBs.length; i++)
+        editorBs[i].addEventListener("change", assignContrast.bind())
+      // ////////////////////////////////////////////////////////////////
 
+      // Sliders
+      const brightnessO = document.getElementById("brightnessM");
+      const contrastO = document.getElementById("contrastM");
+      const saturationO = document.getElementById("saturationM");
+      const sharpnessO = document.getElementById("sharpnessM");
+      // ////////////////////////////////////////////////////////////////
+
+      function assignContrast(){
+        Caman("#canvas", function(){
+          this.brightness( brightnessO.value );
+          this.contrast( contrastO.value );
+          this.saturation( saturationO.value );
+          this.render();
+        });
+      }
+    </script>
 </html>
