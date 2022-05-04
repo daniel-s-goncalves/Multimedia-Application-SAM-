@@ -12,7 +12,7 @@
       <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
   </head>
 
-  <body class="row h-100 text-center text-white bg-dark">
+  <body class="row h-100 text-center text-white interactive-bg">
     <div class="col-7">
       <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
         <header class="mb-auto text-center">
@@ -30,23 +30,65 @@
           </div>
 
           <div id="editBox" class="visually-hidden">
-            <h1>Image uploaded</h1>
-            <p class="lead">Please, tweak the settings bellow.</p>
-            <div class="row mb-3 text-start">
-              <label for="saturationM" class="form-label mb-1">Brightness</label>
-              <input type="range" class="form-range editor-b" min="-100" max="100" step="1" id="brightnessM">
+            <h1>Image Effects</h1>
+
+            <div class="mb-3 text-start">
+              <label for="saturationM" class="attached-text">Brightness</label>
+              <div class="input-field-area">
+                <label for="saturationM" class="me-4">-100</label>
+                <input class="range-editor editor-b" type="range" min="-100" max="100" step="1" value="0" id="brightnessM">
+                <label for="saturationM" class="ms-4">100</label>
+                <input placeholder="0" type="text" class="ms-4 under-line" maxlength="3"/>
+              </div>
             </div> 
-            <div class="row mb-3 text-start mt-4">
-              <label for="contrastM" class="form-label mb-1">Contrast</label>
-              <input type="range" class="form-range editor-b" min="-100" max="100" step="1" id="contrastM">
+            <div class="mb-3 text-start">
+              <label for="saturationM" class="attached-text">Contrast</label>
+              <div class="input-field-area">
+                <label for="saturationM" class="me-4">-100</label>
+                <input class="range-editor editor-b" type="range" min="-100" max="100" step="1" value="0" id="contrastM">
+                <label for="saturationM" class="ms-4">100</label>
+                <input placeholder="0" type="text" class="ms-4 under-line" maxlength="3"/>
+              </div>
+            </div> 
+            <div class="mb-3 text-start">
+              <label for="saturationM" class="attached-text">Saturation</label>
+              <div class="input-field-area">
+                <label for="saturationM" class="me-4">-100</label>
+                <input class="range-editor editor-b" type="range" min="-100" max="100" step="1" value="0" id="saturationM">
+                <label for="saturationM" class="ms-4">100</label>
+                <input placeholder="0" type="text" class="ms-4 under-line" maxlength="3"/>
+              </div>
+            </div> 
+            <div class="mb-3 text-start">
+              <label for="saturationM" class="attached-text">Sharpness</label>
+              <div class="input-field-area">
+                <label for="saturationM" class="me-4">0</label>
+                <input class="range-editor editor-b" type="range" min="0" max="15" step="1" value="0" id="sharpnessM">
+                <label for="saturationM" class="ms-4">15</label>
+                <input placeholder="0" type="text" class="ms-4 under-line" maxlength="2"/>
+              </div>
             </div>
-            <div class="row mb-3 text-start">
-                <label for="saturationM" class="form-label mb-1">Saturation</label>
-                <input type="range" class="form-range editor-b" min="-100" max="100" step="1" id="saturationM">
+            
+            <div class="mb-3 text-start" style="width: 50%;">
+              <label for="saturationM" class="attached-text">Custom Filters</label>
+              <div class="input-field-area d-flex justify-content-between">
+                <label for="saturationM" class="me-4 fs-5">Grayscale</label>
+                <label class="switch">
+                  <input type="checkbox" class="check-filter">
+                  <span class="slider round"></span>
+                </label>
+              </div>
             </div> 
-            <div class="row mb-3 text-start">
-              <label for="saturationM" class="form-label mb-1">Sharpness</label>
-              <input type="range" class="form-range editor-b" min="0" max="15" step="1" value="0" id="sharpnessM">
+
+            <div class="mb-3 text-start" style="width: 50%;">
+              <div class="input-field-area d-flex justify-content-between">
+                <label for="saturationM" class="me-1 fs-5">Threshold</label>
+                <input value="75" type="text" class="me-3 ms-2 another-line disabled-l threshold-var" maxlength="3"/>
+                <label class="switch">
+                  <input type="checkbox" class="check-filter">
+                  <span class="slider round"></span>
+                </label>
+              </div>
             </div>
           </div>
         </main>
@@ -56,9 +98,20 @@
         </footer>
       </div>
     </div>
-    <div class="col-5" id="containingBox" style="background-color: #282d32; padding: 50px !important;">
+    <div class="d-flex flex-column justify-content-center align-items-center col-5" id="containingBox" style="background-color: #06091f; padding: 50px !important;">
       <img id="imageDisplay" src="#" alt="Preview Image" class="visually-hidden m-auto" style="height: 60vh;"/>
-      <canvas width="400" height="300" id="canvas" class="visually-hidden m-auto"/>
+      <h2>Image Preview</h2>
+      <div class="mt-4 mb-4" style="width: 400px; height: 400px; background-color: black;">
+        <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"/>
+      </div>
+      <a href="#">
+        <button type="button" class="btn btn-outline-info" id="storeImageCall">
+          <span class="loading-save spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
+          Save Image
+        </button>
+      </a>
+      <canvas width="500" height="500" id="realCanvas" class="visually-hidden"/>
+      <a id="downloadLink" class="visually-hidden"></a>
     </div>
   </body>
   
@@ -73,7 +126,6 @@
 
       const UID1 = document.getElementById("mainBox");
       const UID2 = document.getElementById("editBox");
-      let defaultImageData = new ImageData(2,2);
       fileUpload.addEventListener("change", displayImage, false);
 
       let imageWidth = 0;
@@ -89,19 +141,18 @@
         let imageObject = new Image;
         imageObject.onload = function(){
             determineCanvasDimension(imageObject.width, imageObject.height)
-            canvasContext.drawImage(imageObject, 0, 0);
-            displayElement(loader, false)
-            displayElement(canvasObject, true)
-            displayElement(UID1, false)
-            displayElement(UID2, true)
-            defaultImageData = canvasContext.getImageData(0, 0, canvasObject.width, canvasObject.height);
+            canvasContext.drawImage(imageObject, 0, 0, canvasObject.width, canvasObject.height);
+            displayElement(loader, false);
+            displayElement(canvasObject, true);
+            displayElement(UID1, false);
+            displayElement(UID2, true);
         }
         imageObject.src = URL.createObjectURL(imageFile);
       }
 
       function determineCanvasDimension(width, height){
-        let maxWidth = document.getElementById("containingBox").clientWidth - 50 * 2;
-        let maxHeight = document.getElementById("containingBox").clientHeight - 50 * 2;
+        let maxWidth = 400;
+        let maxHeight = 400;
         let ratio = width / (height * 1.0);
 
         if(width > height){
@@ -110,7 +161,7 @@
             canvasObject.height = maxWidth / ratio;
           }
           else{
-            canvasObject.width = width * 0.75;
+            canvasObject.width = width;
             canvasObject.height = canvasObject.width / ratio;
           }
         }
@@ -120,7 +171,7 @@
             canvasObject.width = maxHeight * ratio;
           }
           else{
-            canvasObject.height = height * 0.75;
+            canvasObject.height = height;
             canvasObject.width = canvasObject.height * ratio;
           }
         }
@@ -136,15 +187,32 @@
         else
           element.classList.add("visually-hidden");
       }
+
+      function enableElement(element, enable){
+        if(enable)
+          element.classList.remove("disabled-l");
+        else
+          element.classList.add("disabled-l");
+      }
     </script>
     
     <script type="text/javascript" src="{{ url_for('static', filename='caman.full.min.js') }}"></script>
 
     <script>
       // Editor
-      const editorBs = document.getElementsByClassName("editor-b")
-      for(let i = 0; i < editorBs.length; i++)
-        editorBs[i].addEventListener("input", executeChanges)
+      const editorBs = document.getElementsByClassName("editor-b");
+      const inputs = document.getElementsByClassName("under-line");
+      const filters = document.getElementsByClassName("check-filter");
+      const thresholdInput = document.getElementsByClassName("threshold-var")[0];
+      for(let i = 0; i < editorBs.length; i++){
+        editorBs[i].addEventListener("change", executeChanges);
+        editorBs[i].addEventListener("change", applyChange.bind(this, i));
+        inputs[i].addEventListener("input", alternativeInput.bind(this, i));
+      }
+      for(let i = 0; i < filters.length; i++)
+        filters[i].addEventListener("change", filterTriggered.bind(this, i));
+      thresholdInput.addEventListener("input", executeChanges);
+      document.getElementById("storeImageCall").addEventListener("click", storeImage);
       // ////////////////////////////////////////////////////////////////
 
       // Sliders
@@ -152,6 +220,7 @@
       const contrastO = document.getElementById("contrastM");
       const saturationO = document.getElementById("saturationM");
       const sharpnessO = document.getElementById("sharpnessM");
+      let filterSet = null;
       // ////////////////////////////////////////////////////////////////
 
 
@@ -182,20 +251,100 @@
         Caman("#canvas", function(){
           this.revert(false);
 
-          if( parseInt(brightnessO.value) !== 0 )
-            this.brightness( parseInt(brightnessO.value) );
-          
-          if( parseInt(contrastO.value) !== 0 )
-            this.contrast( parseInt(contrastO.value) );
-
-          if( parseInt(saturationO.value) !== 0 )
-            this.saturation( parseInt(saturationO.value) );
-
-          if( parseInt(sharpnessO.value) !== 0 )
-            this.sharpen( parseInt(sharpnessO.value) );
+          if( filterSet == null ){
+            if( parseInt(brightnessO.value) !== 0)
+              this.brightness( parseInt(brightnessO.value) );
+            if( parseInt(contrastO.value) !== 0 )
+              this.contrast( parseInt(contrastO.value) );
+            if( parseInt(saturationO.value) !== 0 )
+              this.saturation( parseInt(saturationO.value) );
+            if( parseInt(sharpnessO.value) !== 0 )
+              this.sharpen( parseInt(sharpnessO.value) );
+          }
+          else{
+            if( filterSet == 0 )
+              this.grayscale();
+            if( filterSet == 1 )
+              this.threshold(thresholdInput.value);
+          }
           
           this.render();
         });
+      }
+
+      function applyChange(elementNum){
+        inputs[elementNum].value = editorBs[elementNum].value;
+      }
+
+      function alternativeInput(elementNum){
+        editorBs[elementNum].value = inputs[elementNum].value;
+        executeChanges();
+      }
+
+      function filterTriggered(elementNum){
+        filterSet = filters[elementNum].checked ? elementNum : null;
+        for(let i = 0; i < editorBs.length; i++){
+          enableElement(editorBs[i], !filters[elementNum].checked);
+          enableElement(inputs[i], !filters[elementNum].checked)
+        }
+        for(let i = 0; i < filters.length; i++){
+          if(i !== elementNum){
+            enableElement(filters[i], !filters[elementNum].checked)
+            filters[i].checked = false;
+          }
+          
+        }
+        if(elementNum === 1)
+            enableElement(thresholdInput, filters[elementNum].checked)
+        executeChanges();
+      }
+
+      function storeImage(){
+        displayElement(document.getElementsByClassName("loading-save")[0], true);
+        document.getElementById("storeImageCall").classList.add("disabled");
+
+        // Use the Real Canvas to work on the image
+        let realCanvas = document.getElementById("realCanvas");
+        let realContext = realCanvas.getContext('2d');
+        let imageFile = fileUpload.files[0];
+        let imageObject = new Image;
+        imageObject.onload = function(){
+            realCanvas.width = imageObject.width;
+            realCanvas.height = imageObject.height;
+            realContext.drawImage(imageObject, 0, 0, realCanvas.width, realCanvas.height);
+            
+            Caman("#realCanvas", function(){
+              if( filterSet == null ){
+                if( parseInt(brightnessO.value) !== 0)
+                  this.brightness( parseInt(brightnessO.value) );
+                if( parseInt(contrastO.value) !== 0 )
+                  this.contrast( parseInt(contrastO.value) );
+                if( parseInt(saturationO.value) !== 0 )
+                  this.saturation( parseInt(saturationO.value) );
+                if( parseInt(sharpnessO.value) !== 0 )
+                  this.sharpen( parseInt(sharpnessO.value) );
+              }
+              else{
+                if( filterSet == 0 )
+                  this.grayscale();
+                if( filterSet == 1 )
+                  this.threshold(thresholdInput.value);
+              }
+              
+              this.render( function(){
+                let link = document.getElementById('downloadLink');
+                link.setAttribute('download', 'EditedImage.png');
+                link.setAttribute('href', realCanvas.toDataURL("image/png", 0.5).replace("image/png", "image/octet-stream"));
+
+                displayElement(document.getElementsByClassName("loading-save")[0], false);
+                document.getElementById("storeImageCall").classList.remove("disabled");
+                link.click();
+              } );
+            });
+        }
+        imageObject.src = URL.createObjectURL(imageFile);
+
+        // ////////////////////////////////////////
       }
     </script>
 </html>
