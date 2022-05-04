@@ -8,7 +8,7 @@ Image.MAX_IMAGE_PIXELS = 8000 * 8000 # Maximum size: 8K
 
 @main.route('/')
 def initialPage():
-    return "<h1>XDDD</h1>"
+    return render_template('index.html')
 
 @main.route('/imageEditor')
 def imageUploadPage():

@@ -188,3 +188,80 @@ input[type=checkbox].disabled-l{
   pointer-events: none;
   background-color: rgba(214, 214, 214, 0.09);
 }
+
+
+
+
+
+/* Used on index.html*/
+
+body{
+  margin: 0;
+  width: 100vw;
+  min-height: 100vh;
+}
+
+.display-sec:hover{
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)) !important;
+}
+
+.image-display{
+  background: url('/static/imageWallpaper.jpg') no-repeat;
+  background-size: cover;
+}
+
+.audio-display{
+  background: url('/static/audioWallpaper.jpg') no-repeat;
+  background-size: cover;
+}
+
+.gif-display{
+  background: url('/static/gifWallpaper.jpg') no-repeat;
+  background-size: cover;
+}
+
+.disp-b{
+  position: relative;
+  padding: 0 !important;
+}
+
+.dark-box{
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  transition: all 0.25s ease-in-out;
+}
+
+.disp-b:hover .dark-box{
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.content-display{
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: white;
+}
+
+.show-exist{
+  opacity: 0;
+  transform: translate(0px, 120px);
+  transition: opacity 0.25s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.disp-b:hover .show-exist{
+  opacity: 1;
+  transform: translate(0px, 0px);
+}
+
+.clickable{
+  cursor: pointer;
+}
