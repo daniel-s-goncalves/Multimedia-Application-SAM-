@@ -195,10 +195,11 @@ input[type=checkbox].disabled-l{
 
 /* Used on index.html*/
 
-body{
+.main-body{
   margin: 0;
   width: 100vw;
   min-height: 100vh;
+  background-color: #000000;
 }
 
 .display-sec:hover{
@@ -264,4 +265,9 @@ body{
 
 .clickable{
   cursor: pointer;
+}
+
+.concealable{
+  opacity: 1;
+  transition: all 0.5s ease-in-out;
 }
