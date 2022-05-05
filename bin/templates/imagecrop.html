@@ -12,7 +12,7 @@
       <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
   </head>
 
-  <body class="row h-100 interactive-bg">
+  <body class="h-100 interactive-bg">
     <div class="d-flex align-items-center justify-content-center text-white interactive-bg" style="height: 10vh;">
       <h2>
           <i class="bi bi-disc"></i>
@@ -32,16 +32,16 @@
             </div>
           </div>
 
-          <div id="editBox" class="visually-hidde" style="width: 80%;">
+          <div id="editBox" class="visually-hidden" style="width: 80%;">
             <h1>Cropping</h1>
-
+            <p class="lead">Drag the box on the right to adjust the dimensions.</p>
             <div class="mb-3 text-start">
               <label for="saturationM" class="attached-text">Dimensions</label>
               <div class="input-field-area">
                 <label for="saturationM" class="me-2">Width</label>
-                <input placeholder="1000" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4"/>
+                <input placeholder="1000" type="text" class="ms-2 me-4 under-line measure-v disabled-l" maxlength="4"/>
                 <label for="saturationM" class="ms-4 me-2">Height</label>
-                <input placeholder="1000" type="text" class="ms-2 under-line measure-v" maxlength="4"/>
+                <input placeholder="1000" type="text" class="ms-2 under-line measure-v disabled-l" maxlength="4"/>
               </div>
             </div>
             
@@ -49,9 +49,9 @@
               <label for="saturationM" class="attached-text">Top left corner</label>
               <div class="input-field-area">
                 <label for="saturationM" class="me-2">Position X</label>
-                <input placeholder="1000" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4"/>
+                <input placeholder="1000" type="text" class="ms-2 me-4 under-line measure-v disabled-l" maxlength="4"/>
                 <label for="saturationM" class="ms-4 me-2">Position Y</label>
-                <input placeholder="1000" type="text" class="ms-2 under-line measure-v" maxlength="4"/>
+                <input placeholder="1000" type="text" class="ms-2 under-line measure-v disabled-l" maxlength="4"/>
               </div>
             </div>
 
@@ -63,7 +63,7 @@
         <h2>Image Preview</h2>
         <div class="mt-4 mb-4 preview-box">
           <div id="cropZone" class="boundary-crop">
-            <div class="preview-topic draggable-resizable"></div>
+            <div id="draggableBox" class="preview-topic draggable-resizable"></div>
           </div>
           <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"/>
         </div>
@@ -92,6 +92,9 @@
       const UID1 = document.getElementById("mainBox");
       const UID2 = document.getElementById("editBox");
       fileUpload.addEventListener("change", displayImage, false);
+
+      let widthRatio = 0.0;
+      let heightRatio = 0.0;
 
       let imageWidth = 0;
       let imageHeight = 0;
@@ -146,6 +149,8 @@
         // Assign for global use
         imageWidth = width;
         imageHeight = height;
+        widthRatio = imageWidth / canvasObject.width;
+        heightRatio = imageHeight / canvasObject.height;
       }
 
       function displayElement(element, showOnScreen){
@@ -164,49 +169,49 @@
     </script>
     
     <script type="text/javascript" src="{{ url_for('static', filename='interact.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='caman.full.min.js') }}"></script>
 
     <script>
       // Input Texts
       let inputMeasures = document.getElementsByClassName("measure-v");
-      for(let i = 0; i < inputMeasures.length; i++)
-        inputMeasures[i].addEventListener("click", measureUpdate)
+      document.getElementById("storeImageCall").addEventListener("click", storeImage);
       // /////////////////////////////////////////////////////////////////////
 
       // Editor
       function setFoundations(){
         let clientBox = canvasObject.getBoundingClientRect();
         let surroundingBox = document.getElementsByClassName("preview-box")[0].getBoundingClientRect();
+        // Set-Limits
         cropAreaDef.style.left = Math.trunc(clientBox.left - surroundingBox.left) + "px";
         cropAreaDef.style.top = Math.trunc(clientBox.top - surroundingBox.top) + "px";
         cropAreaDef.style.width = Math.trunc(clientBox.width) + "px";
         cropAreaDef.style.height = Math.trunc(clientBox.height) + "px";
+
+        // Put box inside limits
+        let cropBox = document.getElementById("draggableBox");
+        cropBox.style.width = (Math.trunc(clientBox.width) * 0.8) + "px"
+        cropBox.style.height = (Math.trunc(clientBox.height) * 0.8) + "px"
+        // translate when resizing from top or left edges
+        let x = Math.trunc(clientBox.width) * 0.1;
+        let y = Math.trunc(clientBox.height) * 0.1;
+        cropBox.style.transform = 'translate(' + x + "px," + y + "px)";
+
+        // Assign attribute for draggable events
+        cropBox.setAttribute("data-x", x);
+        cropBox.setAttribute("data-y", y);
+
+        // Fill in correct values on the display:
+        inputMeasures[0].value = parseInt(Math.trunc(clientBox.width) * 0.8 * widthRatio);
+        inputMeasures[1].value = parseInt(Math.trunc(clientBox.height) * 0.8 * heightRatio);
+        inputMeasures[2].value = parseInt(x * widthRatio);
+        inputMeasures[3].value = parseInt(y * heightRatio);
       }
 
-      function measureUpdate(){
-
-      }
-
-      function updateHeight(){
-
-      }
-
-      function updateWidth(){
-
-      }
-
-      function updateLeft(){
-
-      }
-
-      function updateTop(){
-
-      }
-
-
-
-
-
+      let isStoring = false;
       function storeImage(){
+        if(isStoring)
+          return;
+        isStoring = true;
         displayElement(document.getElementsByClassName("loading-save")[0], true);
         document.getElementById("storeImageCall").classList.add("disabled");
 
@@ -216,23 +221,22 @@
         let imageFile = fileUpload.files[0];
         let imageObject = new Image;
         imageObject.onload = function(){
-            realCanvas.width = imageObject.width;
-            realCanvas.height = imageObject.height;
-            realContext.drawImage(imageObject, 0, 0, realCanvas.width, realCanvas.height);
-            
-            Caman("#realCanvas", function(){
-              // Do something HERE
-              
-              this.render( function(){
-                let link = document.getElementById('downloadLink');
-                link.setAttribute('download', 'EditedImage.png');
-                link.setAttribute('href', realCanvas.toDataURL("image/png", 0.5).replace("image/png", "image/octet-stream"));
+            realCanvas.width = parseInt(inputMeasures[0].value);
+            realCanvas.height = parseInt(inputMeasures[1].value);
+            realContext.drawImage(imageObject, parseInt(inputMeasures[2].value), parseInt(inputMeasures[3].value), realCanvas.width, realCanvas.height, 0, 0, realCanvas.width, realCanvas.height);
 
-                displayElement(document.getElementsByClassName("loading-save")[0], false);
-                document.getElementById("storeImageCall").classList.remove("disabled");
-                link.click();
-              } );
-            });
+            let link = document.getElementById('downloadLink');
+            link.setAttribute('download', 'EditedImage.png');
+            link.setAttribute('href', realCanvas.toDataURL("image/png", 0.5).replace("image/png", "image/octet-stream"));
+
+            displayElement(document.getElementsByClassName("loading-save")[0], false);
+            document.getElementById("storeImageCall").classList.remove("disabled");
+            realCanvas.width = 5;
+            realCanvas.height = 5;
+            realContext.clearRect(0, 0, 5, 5);
+            link.click();
+            link.setAttribute('href', "#");
+            isStoring = false;
         }
         imageObject.src = URL.createObjectURL(imageFile);
 
@@ -242,74 +246,79 @@
 
 
 
-
     <script>
       function dragMoveListener (event) {
-        var target = event.target
+        let target = event.target
         // keep the dragged position in the data-x/data-y attributes
-        var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-        var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+        let x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+        let y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
 
-        // translate the element
+        // Translate the element
         target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
 
-        // update the posiion attributes
+        // Update the position attributes
         target.setAttribute('data-x', x)
         target.setAttribute('data-y', y)
-      }
 
-      // this function is used later in the resizing and gesture demos
-      window.dragMoveListener = dragMoveListener
+        // Input Measure
+        inputMeasures[2].value = parseInt(x * widthRatio);
+        inputMeasures[3].value = parseInt(y * heightRatio);
+      }
 
       interact('.draggable-resizable')
-  .resizable({
-    // resize from all edges and corners
-    edges: { left: true, right: true, bottom: true, top: true },
+      .resizable({
+        // resize from all edges and corners
+        edges: { left: true, right: true, bottom: true, top: true },
 
-    listeners: {
-      move (event) {
-        var target = event.target
-        var x = (parseFloat(target.getAttribute('data-x')) || 0)
-        var y = (parseFloat(target.getAttribute('data-y')) || 0)
+        listeners: {
+          move (event) {
+            var target = event.target
+            var x = (parseFloat(target.getAttribute('data-x')) || 0)
+            var y = (parseFloat(target.getAttribute('data-y')) || 0)
 
-        // update the element's style
-        target.style.width = event.rect.width + 'px'
-        target.style.height = event.rect.height + 'px'
+            // update the element's style
+            target.style.width = event.rect.width + 'px'
+            target.style.height = event.rect.height + 'px'
 
-        // translate when resizing from top or left edges
-        x += event.deltaRect.left
-        y += event.deltaRect.top
+            // translate when resizing from top or left edges
+            x += event.deltaRect.left
+            y += event.deltaRect.top
 
-        target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
+            target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
 
-        target.setAttribute('data-x', x)
-        target.setAttribute('data-y', y)
-        target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height)
-      }
-    },
-      modifiers: [
-        // keep the edges inside the parent
-        interact.modifiers.restrictEdges({
-          outer: 'parent'
-        }),
+            target.setAttribute('data-x', x)
+            target.setAttribute('data-y', y)
+            // Input Measure
+            inputMeasures[0].value = Math.round(event.rect.width * widthRatio);
+            inputMeasures[1].value = Math.round(event.rect.height * heightRatio);
+            inputMeasures[2].value = Math.round(x * widthRatio);
+            inputMeasures[3].value = Math.round(y * heightRatio);
+            target.textContent = inputMeasures[0].value + '\u00D7' + inputMeasures[1].value
+          }
+        },
+          modifiers: [
+            // keep the edges inside the parent
+            interact.modifiers.restrictEdges({
+              outer: 'parent'
+            }),
 
-        // minimum size
-        interact.modifiers.restrictSize({
-          min: { width: 100, height: 50 }
+            // minimum size
+            interact.modifiers.restrictSize({
+              min: { width: 100, height: 50 }
+            })
+          ],
+
+          inertia: true
         })
-      ],
-
-      inertia: true
-    })
-    .draggable({
-      listeners: { move: window.dragMoveListener },
-      inertia: true,
-      modifiers: [
-        interact.modifiers.restrictRect({
-          restriction: 'parent',
-          endOnly: true
+        .draggable({
+          listeners: { move: dragMoveListener },
+          inertia: false,
+          modifiers: [
+            interact.modifiers.restrictRect({
+              restriction: 'parent',
+              endOnly: false
+            })
+          ]
         })
-      ]
-    })
     </script>
 </html>
