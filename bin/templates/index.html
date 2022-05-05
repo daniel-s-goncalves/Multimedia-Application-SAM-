@@ -20,10 +20,10 @@
                     <div class="content-display d-flex flex-column align-items-center justify-content-center">
                         <h2 class="display-title">Image Editor</h2>
                         <p class="show-exist mb-4">Editting. Upscaling. Cropping. All in one place.</p>
-                        <div class="show-exist mt-4 d-flex justify-content-around w-50">
+                        <div class="show-exist mt-4 d-flex justify-content-around w-75">
                             <a href="{{url_for('main.imageUploadPage')}}"><button type="button" class="btn btn-outline-info">Effects</button></a>
-                            <a href="#"></a><button type="button" class="btn btn-outline-info">Cropping</button></a>
-                            <a href="#"></a><button type="button" class="btn btn-outline-info">A.I Upscale</button></a>
+                            <a href="{{url_for('main.imageCropper')}}"><button type="button" class="btn btn-outline-info">Cropping</button></a>
+                            <a href="#"><button type="button" class="btn btn-outline-info">A.I Upscale</button></a>
                         </div>
                     </div>
                 </div>
@@ -58,13 +58,14 @@
     <script>
         const hyperLinks = document.getElementsByTagName("a");
         let destinationPath = "";
-        for(let i = 0; i < hyperLinks.length; i++)
+        for(let i = 0; i < hyperLinks.length; i++){
             hyperLinks[i].addEventListener("click", function(event){
                     destinationPath = this.href;
                     document.getElementsByClassName("concealable")[0].style.opacity = 0;
                     event.preventDefault();
                     setTimeout(redirectTowards, 550);
             }, false);
+        }
 
         function redirectTowards(){
             document.getElementsByClassName("concealable")[0].style.opacity = 1;

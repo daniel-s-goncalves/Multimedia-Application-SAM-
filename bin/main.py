@@ -14,6 +14,10 @@ def initialPage():
 def imageUploadPage():
     return render_template('image.html')
 
+@main.route('/imageEditor/cropper')
+def imageCropper():
+    return render_template('imagecrop.html')
+
 @main.route('/audioEditor')
 def audioUploadPage():
     return render_template('audio.html')

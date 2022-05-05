@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html class="h-100">
+
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>SAM | Image Cropper</title>
+      <!-- Bootstrap core CSS -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+      <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+      <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+  </head>
+
+  <body class="row h-100 interactive-bg">
+    <div class="d-flex align-items-center justify-content-center text-white interactive-bg" style="height: 10vh;">
+      <h2>
+          <i class="bi bi-disc"></i>
+          AudioCanary | Image Cropper
+      </h2>
+    </div>
+
+    <div class="row m-0 text-center text-white border-top border-info" style="height: 90vh; width: 100vw;">
+      <div class="col-xl-7">
+        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column align-items-center justify-content-center">
+          <div id="mainBox">
+            <h1>Upload Image.</h1>
+            <p class="lead">Upload your image. The preview will be shown on the right.</p>
+            <div class="mb-3">
+              <input class="form-control" style="width: 50%; margin: auto;" type="file" id="fileUpload">
+              <div id="loadingView" class="spinner-border visually-hidden" role="status"></div>
+            </div>
+          </div>
+
+          <div id="editBox" class="visually-hidde" style="width: 80%;">
+            <h1>Cropping</h1>
+
+            <div class="mb-3 text-start">
+              <label for="saturationM" class="attached-text">Dimensions</label>
+              <div class="input-field-area">
+                <label for="saturationM" class="me-2">Width</label>
+                <input placeholder="1000" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4"/>
+                <label for="saturationM" class="ms-4 me-2">Height</label>
+                <input placeholder="1000" type="text" class="ms-2 under-line measure-v" maxlength="4"/>
+              </div>
+            </div>
+            
+            <div class="mb-3 text-start">
+              <label for="saturationM" class="attached-text">Top left corner</label>
+              <div class="input-field-area">
+                <label for="saturationM" class="me-2">Position X</label>
+                <input placeholder="1000" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4"/>
+                <label for="saturationM" class="ms-4 me-2">Position Y</label>
+                <input placeholder="1000" type="text" class="ms-2 under-line measure-v" maxlength="4"/>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-column justify-content-center align-items-center col-xl-5" id="containingBox" style="background-color: #06091f; padding: 50px !important;">
+        <img id="imageDisplay" src="#" alt="Preview Image" class="visually-hidden m-auto" style="height: 60vh;"/>
+        <h2>Image Preview</h2>
+        <div class="mt-4 mb-4 preview-box">
+          <div id="cropZone" class="boundary-crop">
+            <div class="preview-topic draggable-resizable"></div>
+          </div>
+          <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"/>
+        </div>
+        <a href="#">
+          <button type="button" class="btn btn-outline-info" id="storeImageCall">
+            <span class="loading-save spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
+            Save Image
+          </button>
+        </a>
+        <canvas width="500" height="500" id="realCanvas" class="visually-hidden"/>
+        <a id="downloadLink" class="visually-hidden"></a>
+      </div>
+    </div>
+  </body>
+  
+    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+  
+    <script>
+      const fileUpload = document.getElementById("fileUpload");
+      const loader = document.getElementById("loadingView");
+      const imageDisplay = document.getElementById("imageDisplay");
+      const canvasObject = document.getElementById("canvas");
+      const canvasContext = canvasObject.getContext('2d');
+      const cropAreaDef = document.getElementById("cropZone");
+
+      const UID1 = document.getElementById("mainBox");
+      const UID2 = document.getElementById("editBox");
+      fileUpload.addEventListener("change", displayImage, false);
+
+      let imageWidth = 0;
+      let imageHeight = 0;
+      let ratio = 0;
+
+      function displayImage(){
+        let imageFile = this.files[0];
+        displayElement(fileUpload, false)
+        displayElement(loader, true)
+        console.log("The file name is: " + imageFile.name)
+        console.log("The file size is: " + imageFile.size + " bytes.")
+        
+        let imageObject = new Image;
+        imageObject.onload = function(){
+            determineCanvasDimension(imageObject.width, imageObject.height)
+            canvasContext.drawImage(imageObject, 0, 0, canvasObject.width, canvasObject.height);
+            displayElement(loader, false);
+            displayElement(canvasObject, true);
+            displayElement(UID1, false);
+            displayElement(UID2, true);
+            setFoundations();
+        }
+        imageObject.src = URL.createObjectURL(imageFile);
+      }
+
+      function determineCanvasDimension(width, height){
+        let maxWidth = 400;
+        let maxHeight = 400;
+        ratio = width / (height * 1.0);
+
+        if(width > height){
+          if(width > maxWidth){
+            canvasObject.width = maxWidth;
+            canvasObject.height = maxWidth / ratio;
+          }
+          else{
+            canvasObject.width = width;
+            canvasObject.height = canvasObject.width / ratio;
+          }
+        }
+        else{
+          if(height > maxHeight){
+            canvasObject.height = maxHeight;
+            canvasObject.width = maxHeight * ratio;
+          }
+          else{
+            canvasObject.height = height;
+            canvasObject.width = canvasObject.height * ratio;
+          }
+        }
+
+        // Assign for global use
+        imageWidth = width;
+        imageHeight = height;
+      }
+
+      function displayElement(element, showOnScreen){
+        if(showOnScreen)
+          element.classList.remove("visually-hidden");
+        else
+          element.classList.add("visually-hidden");
+      }
+
+      function enableElement(element, enable){
+        if(enable)
+          element.classList.remove("disabled-l");
+        else
+          element.classList.add("disabled-l");
+      }
+    </script>
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='interact.min.js') }}"></script>
+
+    <script>
+      // Input Texts
+      let inputMeasures = document.getElementsByClassName("measure-v");
+      for(let i = 0; i < inputMeasures.length; i++)
+        inputMeasures[i].addEventListener("click", measureUpdate)
+      // /////////////////////////////////////////////////////////////////////
+
+      // Editor
+      function setFoundations(){
+        let clientBox = canvasObject.getBoundingClientRect();
+        let surroundingBox = document.getElementsByClassName("preview-box")[0].getBoundingClientRect();
+        cropAreaDef.style.left = Math.trunc(clientBox.left - surroundingBox.left) + "px";
+        cropAreaDef.style.top = Math.trunc(clientBox.top - surroundingBox.top) + "px";
+        cropAreaDef.style.width = Math.trunc(clientBox.width) + "px";
+        cropAreaDef.style.height = Math.trunc(clientBox.height) + "px";
+      }
+
+      function measureUpdate(){
+
+      }
+
+      function updateHeight(){
+
+      }
+
+      function updateWidth(){
+
+      }
+
+      function updateLeft(){
+
+      }
+
+      function updateTop(){
+
+      }
+
+
+
+
+
+      function storeImage(){
+        displayElement(document.getElementsByClassName("loading-save")[0], true);
+        document.getElementById("storeImageCall").classList.add("disabled");
+
+        // Use the Real Canvas to work on the image
+        let realCanvas = document.getElementById("realCanvas");
+        let realContext = realCanvas.getContext('2d');
+        let imageFile = fileUpload.files[0];
+        let imageObject = new Image;
+        imageObject.onload = function(){
+            realCanvas.width = imageObject.width;
+            realCanvas.height = imageObject.height;
+            realContext.drawImage(imageObject, 0, 0, realCanvas.width, realCanvas.height);
+            
+            Caman("#realCanvas", function(){
+              // Do something HERE
+              
+              this.render( function(){
+                let link = document.getElementById('downloadLink');
+                link.setAttribute('download', 'EditedImage.png');
+                link.setAttribute('href', realCanvas.toDataURL("image/png", 0.5).replace("image/png", "image/octet-stream"));
+
+                displayElement(document.getElementsByClassName("loading-save")[0], false);
+                document.getElementById("storeImageCall").classList.remove("disabled");
+                link.click();
+              } );
+            });
+        }
+        imageObject.src = URL.createObjectURL(imageFile);
+
+        // ////////////////////////////////////////
+      }
+    </script>
+
+
+
+
+    <script>
+      function dragMoveListener (event) {
+        var target = event.target
+        // keep the dragged position in the data-x/data-y attributes
+        var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+        var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+        // translate the element
+        target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+
+        // update the posiion attributes
+        target.setAttribute('data-x', x)
+        target.setAttribute('data-y', y)
+      }
+
+      // this function is used later in the resizing and gesture demos
+      window.dragMoveListener = dragMoveListener
+
+      interact('.draggable-resizable')
+  .resizable({
+    // resize from all edges and corners
+    edges: { left: true, right: true, bottom: true, top: true },
+
+    listeners: {
+      move (event) {
+        var target = event.target
+        var x = (parseFloat(target.getAttribute('data-x')) || 0)
+        var y = (parseFloat(target.getAttribute('data-y')) || 0)
+
+        // update the element's style
+        target.style.width = event.rect.width + 'px'
+        target.style.height = event.rect.height + 'px'
+
+        // translate when resizing from top or left edges
+        x += event.deltaRect.left
+        y += event.deltaRect.top
+
+        target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
+
+        target.setAttribute('data-x', x)
+        target.setAttribute('data-y', y)
+        target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height)
+      }
+    },
+      modifiers: [
+        // keep the edges inside the parent
+        interact.modifiers.restrictEdges({
+          outer: 'parent'
+        }),
+
+        // minimum size
+        interact.modifiers.restrictSize({
+          min: { width: 100, height: 50 }
+        })
+      ],
+
+      inertia: true
+    })
+    .draggable({
+      listeners: { move: window.dragMoveListener },
+      inertia: true,
+      modifiers: [
+        interact.modifiers.restrictRect({
+          restriction: 'parent',
+          endOnly: true
+        })
+      ]
+    })
+    </script>
+</html>

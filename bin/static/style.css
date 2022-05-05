@@ -29,6 +29,34 @@ body {
   max-width: 42em;
 }
 
+.boundary-crop{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 400px;
+  height: 400px;
+}
+
+.preview-box{
+  width: 400px; 
+  height: 400px; 
+  background-color: black; 
+  display: flex; 
+  position: relative;
+}
+
+.preview-topic{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 400px;
+  height: 400px;
+  border: 1px solid white;
+  background: #00000085;
+  z-index: 99999;
+  resize: both;
+}
+
 
 /*
  * Header
