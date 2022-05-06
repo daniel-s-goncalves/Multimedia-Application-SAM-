@@ -84,7 +84,7 @@
         </div>
 
         <a href="#">
-          <button type="button" class="btn btn-outline-info" id="storeImageCall">
+          <button type="button" class="btn btn-outline-info" id="sendAudioCall">
             <span class="loading-save spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
             Modify audio!
           </button>
@@ -194,5 +194,27 @@
         function getSeconds(seconds){
             return Math.floor(seconds - getMinutes(seconds) * 60);
         }
+    </script>
+
+    <script>
+      // Audio Communication - Server
+      document.getElementById("sendAudioCall").addEventListener("click", sendAudioServer);
+
+      function sendAudioServer(){
+        let fileD = fileUpload.files[0];
+        let formData = new FormData();
+        formData.append("file", fileD);
+
+        // Send Request
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.open("POST", '/audioEditor', true);
+        //httpRequest.setRequestHeader("Content-Type", "multipart/form-data");
+        httpRequest.onreadystatechange = function(){ 
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                console.log("Terminated. Please, read from Server console to check the data sent.")
+            }
+        }
+        httpRequest.send(formData);
+      }
     </script>
 </html>

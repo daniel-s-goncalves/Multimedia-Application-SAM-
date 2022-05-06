@@ -1,10 +1,13 @@
 from flask import Blueprint, render_template, request
 from . import databaseAPI as DBAPI
 from PIL import Image
+from pydub import AudioSegment
+import librosa
+import random
+import string
 
 main = Blueprint('main', __name__)
 Image.MAX_IMAGE_PIXELS = 8000 * 8000 # Maximum size: 8K
-
 
 @main.route('/')
 def initialPage():
@@ -22,16 +25,26 @@ def imageCropper():
 def audioUploadPage():
     return render_template('audio.html')
 
-@main.route('/imageEditor', methods=['POST'])
-def imageEditor():
-    print("I am here!")
-    imageFile = request.files.get("file")
+@main.route('/audioEditor', methods=['POST'])
+def audioEditor():
+    soundFile = request.files.get("file")
+    print(soundFile)
 
-    # This section takes care of the Image
-    result = Image.open(imageFile)
-    width, height = result.size
-    print(width)
-    print(height)
+    # Generate Random File for Storage
+    fileName = generateFileName(15)
+    soundFile.save(fileName + soundFile.filename)
+    # ###################################################
+
+    # Convert MP3 to WAV
+    sound = AudioSegment.from_mp3(fileName + soundFile.filename)
+    sound.export('lolXD.wav', format="wav")
+    y, samprate = librosa.load('lolXD.wav')
     # ####################################
     return "OK"
-    # return render_template('imgeditor.html')
+
+def generateFileName(length):
+    characters = string.ascii_uppercase + string.digits
+    fileName = ''
+    for i in range(length):
+        fileName += random.choice(characters)
+    return fileName
