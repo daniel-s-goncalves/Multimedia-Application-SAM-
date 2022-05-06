@@ -4,12 +4,15 @@
 
 You need to install 'Rubberband CLI' and 'ffmpeg' to allow the server to make audio editions.
 
-====================================================================================================
 You can install these libraries with 'homebrew' if you are using MAC OS:
 
-```brew install rubberband```
-```brew install ffmpeg```
-====================================================================================================
+```
+brew install rubberband
+```
+
+```
+brew install ffmpeg
+```
 
 If you are using Windows you will need to download these libraries separately and add each of them to the PATH environment library.
 
