@@ -24,9 +24,13 @@ https://www.gyan.dev/ffmpeg/builds/ - Select 'ffmpeg-git-full.7z'.
 
 Remember you will need to extract and add the FOLDERS where the rubberband.exe and ffmpeg.exe files are to the PATH environment variable. 
 
-# How to run
+# Okay, I have installed these libraries. How do I run the server?
 
-> Update: Due to some unexpected virtual environment distinctions between Win/Linux distributions (namely environment variables), the system will now run in a global scenario without the need for a Virtual Environment.
+First, you will need to install all the required packages. In order to do this, simply type:
+
+```
+pip3 install -r requirements.txt
+```
 
 To run the application your terminal will need to be inside the directory of this same repository. After installing the **requirements** you will be able to activate the server by running the following command:
 
