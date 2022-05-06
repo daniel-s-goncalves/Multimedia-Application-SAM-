@@ -1,5 +1,18 @@
 # SAM - Multimedia Application
 
+# Important!!!
+
+You need to install 'Rubberband CLI' and 'ffmpeg' to allow the server to make audio editions.
+
+====================================================================================================
+You can install these libraries with 'homebrew' if you are using MAC OS:
+
+```brew install rubberband```
+```brew install ffmpeg```
+====================================================================================================
+
+If you are using Windows you will need to download these libraries separately and add each of them to the PATH environment library.
+
 # How to run
 
 > Update: Due to some unexpected virtual environment distinctions between Win/Linux distributions (namely environment variables), the system will now run in a global scenario without the need for a Virtual Environment.

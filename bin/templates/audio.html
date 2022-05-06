@@ -34,14 +34,49 @@
 
           <div id="editBox" class="visually-hidden" style="width: 80%;">
             <h1>Audio Editor</h1>
-            <p class="lead">Tweak any settings you want. Only the settings you have modified will apply.</p>
+            <p class="lead">Tweak any settings you want. Only the settings you modify will be applied.</p>
             <div class="mb-3 text-start">
               <label for="saturationM" class="attached-text">Audio Cropping</label>
               <div class="input-field-area">
                 <label for="saturationM" class="me-2">Start</label>
-                <input placeholder="1000" type="text" class="ms-2 me-4 under-line measure-v disabled-l" maxlength="4"/>
+                <input id="startTimeBox" placeholder="0" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4"/>
                 <label for="saturationM" class="ms-4 me-2">End</label>
-                <input placeholder="1000" type="text" class="ms-2 under-line measure-v disabled-l" maxlength="4"/>
+                <input id="endTimeBox" placeholder="5" type="text" class="ms-2 under-line measure-v" maxlength="4"/>
+              </div>
+            </div>
+            <!--
+            <div class="mb-3 text-start">
+              <label for="pitchM" class="attached-text">Audio Pitch</label>
+              <div class="input-field-area">
+                <label for="saturationM" class="me-4">0</label>
+                <input id="pitchSlider" class="range-editor editor-b" type="range" min="-6" max="6" step="1" value="0" id="pitchM">
+                <label for="saturationM" class="ms-4 me-2">15</label>
+                <input id="pitchDisplayValue" placeholder="1000" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="0"/>
+              </div>
+            </div>
+            -->
+            <div class="mb-3 text-start">
+              <label for="saturationM" class="attached-text">Audio Speed</label>
+              <div class="input-field-area">
+                <label for="saturationM" class="me-4">0.5</label>
+                <input id="speedSlider" class="range-editor editor-b" type="range" min="0.5" max="2.5" step="0.25" value="1" id="speedM">
+                <label for="saturationM" class="ms-4 me-2">2.5</label>
+                <input id="speedDisplayValue" placeholder="1000" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="1"/>
+              </div>
+            </div>
+            <div class="mb-3 text-start" style="width: 40%;">
+              <label for="saturationM" class="attached-text">Export Format</label>
+              <div class="input-field-area">
+                <div class="btn-group">
+                  <button id="exportSelected" type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Extension
+                  </button>
+                  <ul class="dropdown-menu" style="background-color: #0dcaf0; color: white;">
+                    <li><a class="dropdown-item selectable-extension" href="#">.mp3</a></li>
+                    <!-- <li><a class="dropdown-item selectable-extension" href="#">.ogg</a></li> -->
+                    <li><a class="dropdown-item selectable-extension" href="#">.wav</a></li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -61,7 +96,7 @@
                     </div>
                 </div>
                 <div class="time">
-                    <div class="current" id="audioOngoing">0:00</div>
+                    <div class="current" id="audioOngoing">00:00</div>
                     <div class="divider">/</div>
                     <div class="length" id="audioLength">0:00</div>
                 </div>
@@ -98,6 +133,36 @@
     <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
   
     <script>
+      // Audio Editor - Section
+      const startTimeDisplay = document.getElementById("startTimeBox");
+      const endTimeDisplay = document.getElementById("endTimeBox");
+      // const pitchSlider = document.getElementById("pitchSlider");
+      // const pitchDisplayValue = document.getElementById("pitchDisplayValue");
+      const speedSlider = document.getElementById("speedSlider");
+      const speedDisplayValue = document.getElementById("speedDisplayValue")
+      const exportSelected = document.getElementById("exportSelected");
+      const extensions = document.getElementsByClassName("selectable-extension");
+
+      // Important
+      let maximumTime = 0;
+      let minimumTime = 0;
+
+      // APPLY LISTENERS
+      for(let i = 0; i < extensions.length; i++)
+        extensions[i].addEventListener("click", setExtension);
+      speedSlider.addEventListener("change", updateSpeed);
+      // //////////////////////////////////////////////////////////////////////////
+
+      function setExtension(){
+        exportSelected.innerText = this.innerText;
+      }
+      
+      function updateSpeed(){
+        speedDisplayValue.value = speedSlider.value;
+      }
+    </script>
+
+    <script>
       const fileUpload = document.getElementById("fileUpload");
       const loader = document.getElementById("loadingView");
       const imageDisplay = document.getElementById("imageDisplay");
@@ -123,7 +188,14 @@
         displayElement(UID1, false);
         displayElement(UID2, true);
         displayElement(document.getElementById("audioPlayer"), true);
-        maxDuration.innerText = getMinutes(audioObject.duration) + ":" + getSeconds(audioObject.duration);
+        maxDuration.innerText = ("0" + getMinutes(audioObject.duration)).slice(-2) + ":" + ("0" + getSeconds(audioObject.duration)).slice(-2);
+        
+        // Set variables
+        maximumTime = Math.trunc(audioObject.duration);
+        minimumTime = 0;
+
+        startTimeDisplay.value = minimumTime;
+        endTimeDisplay.value = maximumTime;
       }
 
       function displayElement(element, showOnScreen){
@@ -161,7 +233,7 @@
                 return;
 
             let progress = audioObject.currentTime / audioObject.duration;
-            currentTime.innerText = getMinutes(audioObject.currentTime) + ":" + getSeconds(audioObject.currentTime);
+            currentTime.innerText = ("0" + getMinutes(audioObject.currentTime)).slice(-2) + ":" + ("0" + getSeconds(audioObject.currentTime)).slice(-2);
             progressBar.style.width = (progress * 100) + "%";
             setTimeout(progressUpdate, 250);
         }
@@ -173,9 +245,7 @@
                 playAudio()
         }
 
-
         // Utilities
-
         function playAudio(){
             isPlaying = true;
             audioObject.play();
@@ -204,6 +274,12 @@
         let fileD = fileUpload.files[0];
         let formData = new FormData();
         formData.append("file", fileD);
+        formData.append("extension", exportSelected.innerText == "Extension" ? ".mp3" : exportSelected.innerText)
+        formData.append("speed", speedSlider.value)
+        formData.append("startTime", startTimeDisplay.value)
+        formData.append("endTime", endTimeDisplay.value)
+        formData.append("DEFAULTSTART", minimumTime)
+        formData.append("DEFAULTEND", maximumTime)
 
         // Send Request
         var httpRequest = new XMLHttpRequest();
@@ -211,6 +287,14 @@
         //httpRequest.setRequestHeader("Content-Type", "multipart/form-data");
         httpRequest.onreadystatechange = function(){ 
             if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                let jsonResponse = JSON.parse(this.responseText);
+                let link = document.createElement("a");
+                document.body.appendChild(link);
+                link.setAttribute("type", "hidden");
+                link.href = "data:text/plain;base64," + jsonResponse['musicFile'];
+                link.download = "audioFile" + jsonResponse['extension'];
+                link.click();
+                document.body.removeChild(link);
                 console.log("Terminated. Please, read from Server console to check the data sent.")
             }
         }

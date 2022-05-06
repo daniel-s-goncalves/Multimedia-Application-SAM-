@@ -1,26 +1,29 @@
 import librosa
 import soundfile as sf
+import pyrubberband as PYBR
 from pydub import AudioSegment
+from pydub.utils import mediainfo
 
 def changePitch(audio_y, samplerate, num_semitones):
-    # https://batulaiko.medium.com/how-to-pitch-shift-in-python-c59b53a84b6d
-    # https://stackoverflow.com/questions/58810035/converting-audio-files-between-pydub-and-librosa
-    new_y = librosa.effects.pitch_shift(audio_y,sr = samplerate , n_steps = float(num_semitones))
-    print('new pitch')
-    sf.write('pitchfile.wav', new_y, samplerate, subtype='PCM_24')
+    """
+        Only returns audio_y.
+        DEPRECATED - The audio quality is sacrificed ... Not worth pursuing ...
+    """
+    return librosa.effects.pitch_shift(audio_y, sr = samplerate, n_steps = float(num_semitones))
 
-def changeSpeed(audio_y,samplerate,speed):
-    new_y = librosa.effects.time_stretch(audio_y, rate=speed)
-    print('new speed')
-    sf.write('speedfile.wav', new_y, samplerate, subtype='PCM_24')
+def changeSpeed(audio_y, samplerate, speed):
+    return PYBR.time_stretch(audio_y, samplerate, speed)
 
-def cutAudiolength(audioSegment, startTime, endTime):
-    return audioSegment[startTime:endTime]
+def loadFile(filename, beggining=None, end=None):
+    if(beggining == None and end == None):
+        return librosa.load(filename)
+    duration = float(end) - float(beggining)
+    return librosa.load(filename, offset = float(beggining), duration=duration)
 
-def loadAndStore(filePath, storePath):
-    y, sr = librosa.load(filePath)
-    sf.write(storePath, y, sr, subtype='PCM_24')
-    print("Done!")
+def exportFile(audio_y, samplerate, filename):
+    sf.write(filename + ".wav", audio_y, samplerate, format='wav', subtype='PCM_24')
 
-def convertToExtension(filePath, finalFormat):
-    AudioSegment.from_wav(filePath).export("output." + finalFormat, format=finalFormat)
+def convertToExtension(filePath, storeFileName, finalFormat):
+    segment = AudioSegment.from_wav(filePath)
+    bitrate = mediainfo(filePath)["bit_rate"]
+    segment.export(storeFileName + "." + finalFormat, format=finalFormat, bitrate=bitrate)
