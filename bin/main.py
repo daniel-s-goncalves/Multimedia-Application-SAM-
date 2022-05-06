@@ -3,6 +3,8 @@ from flask import Blueprint, render_template, request
 from . import databaseAPI as DBAPI
 from . import audioEdit as AudioEditor
 from PIL import Image
+from pydub import AudioSegment
+from pydub.utils import mediainfo
 import random
 import string
 import os
@@ -40,9 +42,15 @@ def audioEditor():
     soundFile.save(filePath)
     # ###################################################
 
-    AudioEditor.cutAudiolength(filePath, 15, 100, storedPath)
-    AudioEditor.convertToExtension(storedPath, "mp3")
-    clearStorage(filePath, storedPath)
+    # Load the File
+    defaultBitrate = mediainfo(filePath)['bit_rate']
+    audioFileM = AudioSegment.from_file(filePath)
+    audioFileM.export("exportedAudio2.mp3", format="mp3", bitrate=defaultBitrate)
+    print(audioFileM.duration_seconds)
+    # ###################################################
+
+    extract = AudioEditor.cutAudiolength(audioFileM, 15 * 1000, 75 * 1000)
+    extract.export("someaudio.mp3", format="mp3", bitrate=defaultBitrate)
     return "OK"
 
 
