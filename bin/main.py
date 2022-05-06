@@ -1,10 +1,14 @@
 from flask import Blueprint, render_template, request
+
 from . import databaseAPI as DBAPI
+from . import audioEdit as AudioEditor
 from PIL import Image
-from pydub import AudioSegment
-import librosa
 import random
 import string
+import os
+
+import warnings
+warnings.filterwarnings("ignore")
 
 main = Blueprint('main', __name__)
 Image.MAX_IMAGE_PIXELS = 8000 * 8000 # Maximum size: 8K
@@ -31,16 +35,22 @@ def audioEditor():
     print(soundFile)
 
     # Generate Random File for Storage
-    fileName = generateFileName(15)
-    soundFile.save(fileName + soundFile.filename)
+    filePath = generateFileName(15) + "." + soundFile.filename.split('.')[-1]
+    storedPath = generateFileName(15) + ".wav"
+    soundFile.save(filePath)
     # ###################################################
 
-    # Convert MP3 to WAV
-    sound = AudioSegment.from_mp3(fileName + soundFile.filename)
-    sound.export('lolXD.wav', format="wav")
-    y, samprate = librosa.load('lolXD.wav')
-    # ####################################
+    AudioEditor.cutAudiolength(filePath, 15, 100, storedPath)
+    AudioEditor.convertToExtension(storedPath, "mp3")
+    clearStorage(filePath, storedPath)
     return "OK"
+
+
+# Utilities !!
+
+def clearStorage(filePath, storedPath):
+    os.remove(filePath)
+    os.remove(storedPath)
 
 def generateFileName(length):
     characters = string.ascii_uppercase + string.digits
