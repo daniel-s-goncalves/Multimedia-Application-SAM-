@@ -2,7 +2,7 @@
 
 # Important!!!
 
-You need to install 'Rubberband CLI' and 'ffmpeg' to allow the server to make audio editions.
+Installing 'Rubberband CLI' and 'ffmpeg' is explicitly required in order to let the server to make audio editions.
 
 You can install these libraries with 'homebrew' if you are using MAC OS:
 
@@ -14,36 +14,24 @@ brew install rubberband
 brew install ffmpeg
 ```
 
-If you are using Windows you will need to download these libraries separately and add each of them to the PATH environment library.
+## Skip this step if you are not using Windows
+
+If you are using Windows you will need to download these libraries individually and add each of them to the PATH environment library.
+
+https://breakfastquay.com/rubberband/ - Click on 'Rubber Band Library v2.0.2 command-line utility' where it says Windows.
+
+https://www.gyan.dev/ffmpeg/builds/ - Select 'ffmpeg-git-full.7z'. 
+
+Remember you will need to extract and add the FOLDERS where the rubberband.exe and ffmpeg.exe files are to the PATH environment variable. 
 
 # How to run
 
 > Update: Due to some unexpected virtual environment distinctions between Win/Linux distributions (namely environment variables), the system will now run in a global scenario without the need for a Virtual Environment.
 
-**Step 1:** From the main directory (the repository's directory), run the following command:
+To run the application your terminal will need to be inside the directory of this same repository. After installing the **requirements** you will be able to activate the server by running the following command:
 
-```
-pip install -r requirements.txt
-```
-
-**Step 2:** Set up the env variable for flask. This process has two commands, choose the one that fits your OS:
-
-Windows:
-```
-set FLASK_APP=bin
-$env:FLASK_APP = "bin"
-```
-
-Linux:
-```
-export FLASK_APP=bin
-```
-
-**Step 3:** Run the flask application using the following commands:
-
-Windows / Linux:
 ```
 python3 -m flask run
 ```
 
-By default, the website will be available inside ```http://localhost:5000/```
+By default, the website will be available through the following link ```http://localhost:5000/```
