@@ -27,9 +27,34 @@ def imageUploadPage():
 def imageCropper():
     return render_template('imagecrop.html')
 
-@main.route('/audioEditor')
+@main.route('/audioEditor', methods=['GET'])
 def audioUploadPage():
     return render_template('audio.html')
+
+@main.route('/gifEditor')
+def gifUploadPage():
+    return render_template('gif.html')
+
+@main.route('/gifEditor', methods=['POST'])
+def gifEditor():
+    gifFile = request.files.get("file")
+
+    # Input Variables
+    frameSpeed = request.form.get("framespeed")
+    optimizationLevel = request.form.get("optimizationLevel")
+    shouldReverse = request.form.get("shouldReverse")
+    shouldLoopback = request.form.get("shouldLoopback")
+    shouldShowCounter = request.form.get("shouldShowCounter")
+    # #################
+
+    print(frameSpeed)
+    print(optimizationLevel)
+    print(shouldReverse)
+    print(shouldLoopback)
+    print(shouldShowCounter)
+
+    # TODO: DO THE GIF STUFF HERE!
+    return "RETURN FILE HERE"  
 
 @main.route('/audioEditor', methods=['POST'])
 def audioEditor():

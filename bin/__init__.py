@@ -12,6 +12,7 @@ def create_app():
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sqlite.db'
     app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
     db.init_app(app)
