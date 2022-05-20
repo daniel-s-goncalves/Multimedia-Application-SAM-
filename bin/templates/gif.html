@@ -37,37 +37,30 @@
             <p class="lead">Tweak any settings you want. Only the settings you modify will be applied.</p>
             <div class="mb-3 text-start">
               <label for="saturationM" class="attached-text">GIF Frame Speed</label>
-              <div class="input-field-area">
-                <label for="saturationM" class="me-2">Frame Speed</label>
-                <input id="frameSpeedM" placeholder="0" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4"/>
-                <label for="saturationM" class="me-2"></label>
+              <div class="input-field-area" style="justify-content: start !important;">
+                <label for="saturationM" class="me-4">0.5</label>
+                <input id="speedM" class="range-editor editor-b" type="range" min="0.5" max="2" step="0.1" value="1">
+                <label for="saturationM" class="ms-4 me-2">2</label>
+                <input id="speedDisplayValue" placeholder="1" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="1"/>
               </div>
             </div>
+
             <!--
-            <div class="mb-3 text-start">
-              <label for="pitchM" class="attached-text">Extract Frames</label>
-              <div class="input-field-area">
-                <label for="saturationM" class="me-2">First Frame</label>
-                <input id="frameCutStartM" placeholder="0" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4"/>
-                <label for="saturationM" class="ms-4 me-2">Last Frame</label>
-                <input id="frameCutEndM" placeholder="0" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4"/>
-              </div>
-            </div>
-            -->
             <div class="mb-3 text-start">
               <label for="saturationM" class="attached-text">Compress Level</label>
               <div class="input-field-area">
                 <label for="saturationM" class="me-4">0</label>
-                <input id="compressLevelM" class="range-editor editor-b" type="range" min="0" max="15" step="1" value="0" id="compressM">
+                <input id="compressLevelM" class="range-editor editor-b" type="range" min="0" max="15" step="1" value="0">
                 <label for="saturationM" class="ms-4 me-2">15</label>
-                <input id="compressLevelDisplayValue" placeholder="1000" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="0"/>
+                <input id="compressLevelDisplayValue" placeholder="0" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="0"/>
               </div>
             </div>
+          -->
 
             <div class="mb-3 text-start" style="width: 50%;">
               <label for="saturationM" class="attached-text">Animation Flow</label>
               <div class="input-field-area d-flex justify-content-between">
-                <label for="saturationM" class="me-1 fs-5">Reverse</label>
+                <label for="saturationM" class="me-1 fs-5 checker-input">Reverse</label>
                 <label class="switch">
                   <input id="reverseM" type="checkbox" class="check-filter">
                   <span class="slider round"></span>
@@ -77,23 +70,24 @@
 
             <div class="mb-3 text-start" style="width: 50%;">
               <div class="input-field-area d-flex justify-content-between">
-                <label for="saturationM" class="me-1 fs-5">Loopback</label>
+                <label for="saturationM" class="me-1 fs-5 checker-input">Loopback</label>
                 <label class="switch">
                   <input id="loopbackM" type="checkbox" class="check-filter">
                   <span class="slider round"></span>
                 </label>
               </div>
-            </div>
-
+            </div>   
+            
             <div class="mb-3 text-start" style="width: 50%;">
+              <label for="saturationM" class="attached-text">Misc</label>
               <div class="input-field-area d-flex justify-content-between">
-                <label for="saturationM" class="me-1 fs-5">Second counter</label>
+                <label for="saturationM" class="me-1 fs-5 checker-input">Extract Frames</label>
                 <label class="switch">
-                  <input id="secondCounterM" type="checkbox" class="check-filter">
+                  <input id="enableExtractM" type="checkbox" class="check-filter">
                   <span class="slider round"></span>
                 </label>
               </div>
-            </div>            
+            </div>   
           </div>
         </div>
       </div>
@@ -163,16 +157,36 @@
 
     <script>
       // Input Components
-      const frameSpeedO = document.getElementById("frameSpeedM");
-      //frameCutStartO = document.getElementById("frameCutStartM");
-      //frameCutEndO = document.getElementById("frameCutEndM");
-      const compressLevelO = document.getElementById("compressLevelM");
-      const compressLevelDisplayO = document.getElementById("compressLevelDisplayValue");
+      const frameSpeedO = document.getElementById("speedM");
+      const frameSpeedDisplayO = document.getElementById("speedDisplayValue");
+      //const compressLevelO = document.getElementById("compressLevelM");
+      //const compressLevelDisplayO = document.getElementById("compressLevelDisplayValue");
 
       // Checkers
       const reverseO = document.getElementById("reverseM");
       const loopbackO = document.getElementById("loopbackM");
-      const counterO = document.getElementById("secondCounterM");
+      const extractSwitchO = document.getElementById("enableExtractM");
+      const checkFiltersO = document.getElementsByClassName("check-filter");
+
+      // Event Listeners::
+      frameSpeedO.addEventListener("input", function(){ frameSpeedDisplayO.value = frameSpeedO.value; })
+      //compressLevelO.addEventListener("input", function(){ compressLevelDisplayO.value = compressLevelO.value; })
+      for(let i = 0; i < checkFiltersO.length; i++)
+        checkFiltersO[i].addEventListener("click", filterProcess)
+      checkFiltersO[2].addEventListener("click", handleExtraction)
+
+      function filterProcess(event){
+        if(!event.target.checked)
+          return;
+        for(let i = 0; i < checkFiltersO.length; i++){
+          if(checkFiltersO[i] !== event.target)
+            checkFiltersO[i].checked = false;
+        }
+      }
+
+      function handleExtraction(event){
+        enableElement(frameSpeedO, !event.target.checked)
+      }
     </script>
 
     <script>
@@ -184,10 +198,10 @@
         let formData = new FormData();
         formData.append("file", fileD);
         formData.append("framespeed", frameSpeedO.value)
-        formData.append("optimizationLevel", compressLevelO.value)
+        //formData.append("optimizationLevel", compressLevelO.value)
         formData.append("shouldReverse", reverseO.checked)
         formData.append("shouldLoopback", loopbackO.checked)
-        formData.append("shouldShowCounter", counterO.checked)
+        formData.append("shouldExtractFrames", extractSwitchO.checked)
 
         // Send Request
         var httpRequest = new XMLHttpRequest();
@@ -195,18 +209,15 @@
         //httpRequest.setRequestHeader("Content-Type", "multipart/form-data");
         httpRequest.onreadystatechange = function(){ 
             if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                console.log("Data sent");
-                /*
                 let jsonResponse = JSON.parse(this.responseText);
                 let link = document.createElement("a");
                 document.body.appendChild(link);
                 link.setAttribute("type", "hidden");
-                link.href = "data:text/plain;base64," + jsonResponse['musicFile'];
-                link.download = "audioFile" + jsonResponse['extension'];
+                link.href = "data:text/plain;base64," + jsonResponse['imageFile'];
+                link.download = "result" + jsonResponse['extension'];
                 link.click();
                 document.body.removeChild(link);
                 console.log("Terminated. Please, read from Server console to check the data sent.")
-                */
             }
         }
         httpRequest.send(formData);

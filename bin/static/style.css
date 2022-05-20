@@ -420,3 +420,19 @@ input[type=checkbox].disabled-l{
   left: -123px;
   width: 120px;
 }
+
+.special-input-field-area{
+  position: relative;
+  width: 100%;
+  height: calc(65px - 10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.special-input-field-area-background{
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1% 2.5%;
+}

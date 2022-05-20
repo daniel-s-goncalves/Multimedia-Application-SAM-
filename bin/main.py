@@ -1,10 +1,11 @@
+from asyncio.windows_events import NULL
 from flask import Blueprint, render_template, request
-from flask import jsonify, make_response
 
 from . import databaseAPI as DBAPI
 from . import audioEdit as AudioEditor
 from . import gifEdit as GifEditor
 from PIL import Image
+from io import BytesIO
 import base64
 import random
 import string
@@ -42,23 +43,27 @@ def gifEditor():
 
     # Input Variables
     frameSpeed = request.form.get("framespeed")
-    optimizationLevel = request.form.get("optimizationLevel")
     shouldReverse = request.form.get("shouldReverse")
     shouldLoopback = request.form.get("shouldLoopback")
-    shouldShowCounter = request.form.get("shouldShowCounter")
+    shouldExtract = request.form.get("shouldExtractFrames")
     # #################
 
-    print(frameSpeed)
-    print(optimizationLevel)
-    print(shouldReverse)
-    print(shouldLoopback)
-    print(shouldShowCounter)
-
     imageObject = Image.open(gifFile.stream)
-    GifEditor.loopBackGif(imageObject)
+    GifFrameDuration = GifEditor.getNewFrameDuration(imageObject, frameSpeed)
+    BytesIOData = NULL
+    if(shouldReverse == "false" and shouldLoopback == "false" and shouldExtract == "false"):
+        print("Readjusting GIF Size ... ", end=" ")
+        BytesIOData = GifEditor.changeGifSpeed(imageObject, GifFrameDuration)
+    if(shouldReverse == "true"):
+        print("Reversing GIF ... ", end=" ")
+        BytesIOData = GifEditor.reverseGif(imageObject, GifFrameDuration)
+    if(shouldLoopback == "true"):
+        print("Loopbacking GIF ... ", end=" ")
+        BytesIOData = GifEditor.loopBackGif(imageObject, GifFrameDuration)
 
-    # TODO: DO THE GIF STUFF HERE!
-    return "RETURN FILE HERE"  
+    encodedImage = base64.b64encode(BytesIOData.getvalue())
+    print("Process Complete!")
+    return { "imageFile": encodedImage.decode(), "extension": ".GIF" }
 
 @main.route('/audioEditor', methods=['POST'])
 def audioEditor():
