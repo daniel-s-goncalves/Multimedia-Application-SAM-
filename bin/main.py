@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from flask import Blueprint, render_template, request
 
 from . import databaseAPI as DBAPI
@@ -6,13 +5,16 @@ from . import audioEdit as AudioEditor
 from . import gifEdit as GifEditor
 from PIL import Image
 from io import BytesIO
+import zipfile
 import base64
 import random
 import string
 import os
 
+# Supress some weird warnings used in Audio
 import warnings
 warnings.filterwarnings("ignore")
+# #########################################
 
 main = Blueprint('main', __name__)
 Image.MAX_IMAGE_PIXELS = 8000 * 8000 # Maximum size: 8K
@@ -48,22 +50,35 @@ def gifEditor():
     shouldExtract = request.form.get("shouldExtractFrames")
     # #################
 
+    print(shouldExtract)
+
     imageObject = Image.open(gifFile.stream)
     GifFrameDuration = GifEditor.getNewFrameDuration(imageObject, frameSpeed)
-    BytesIOData = NULL
+    BytesIOData = BytesIO()
+    extension = ".gif"
     if(shouldReverse == "false" and shouldLoopback == "false" and shouldExtract == "false"):
-        print("Readjusting GIF Size ... ", end=" ")
+        print("Readjusting GIF Size ...", end=" ")
         BytesIOData = GifEditor.changeGifSpeed(imageObject, GifFrameDuration)
     if(shouldReverse == "true"):
-        print("Reversing GIF ... ", end=" ")
+        print("Reversing GIF ...", end=" ")
         BytesIOData = GifEditor.reverseGif(imageObject, GifFrameDuration)
     if(shouldLoopback == "true"):
-        print("Loopbacking GIF ... ", end=" ")
+        print("Loopbacking GIF ...", end=" ")
         BytesIOData = GifEditor.loopBackGif(imageObject, GifFrameDuration)
+    if(shouldExtract == "true"):
+        print("Zipping frames ...", end=" ")
+        images = GifEditor.extractGifFrames(imageObject)
+        with zipfile.ZipFile(BytesIOData, "a", zipfile.ZIP_DEFLATED, False) as zipFile:
+            counter = 0
+            for image in images:
+                byteData = GifEditor.obtainImageBytes(image)
+                zipFile.writestr("output" + str(counter) + ".jpg", byteData.getvalue())
+                counter = counter + 1
+        extension = ".zip"
 
     encodedImage = base64.b64encode(BytesIOData.getvalue())
     print("Process Complete!")
-    return { "imageFile": encodedImage.decode(), "extension": ".GIF" }
+    return { "imageFile": encodedImage.decode(), "extension": extension }
 
 @main.route('/audioEditor', methods=['POST'])
 def audioEditor():

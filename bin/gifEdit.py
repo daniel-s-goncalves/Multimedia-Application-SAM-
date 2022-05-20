@@ -33,5 +33,13 @@ def loopBackGif(gif:Image, duration:int):
     images[0].save(buffered, save_all=True, append_images=images[1:], optimize=False, duration=duration, loop=0, format="GIF")
     return buffered
 
+def obtainImageBytes(gif:Image):
+    buffered = BytesIO()
+    gif.save(buffered, save_all=True, format="GIF")
+    return buffered
+
+def extractGifFrames(gif:Image):
+    return getframes(gif,0,gif.n_frames,1)
+
 def getNewFrameDuration(gif:Image, factor:float):
     return int( gif.info['duration'] / float(factor) );
