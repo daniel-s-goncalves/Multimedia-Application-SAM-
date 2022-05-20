@@ -3,6 +3,7 @@ from flask import jsonify, make_response
 
 from . import databaseAPI as DBAPI
 from . import audioEdit as AudioEditor
+from . import gifEdit as GifEditor
 from PIL import Image
 import base64
 import random
@@ -52,6 +53,9 @@ def gifEditor():
     print(shouldReverse)
     print(shouldLoopback)
     print(shouldShowCounter)
+
+    imageObject = Image.open(gifFile.stream)
+    GifEditor.loopBackGif(imageObject)
 
     # TODO: DO THE GIF STUFF HERE!
     return "RETURN FILE HERE"  
