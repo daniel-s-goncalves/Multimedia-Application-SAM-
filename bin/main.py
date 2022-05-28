@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request
 
 from . import databaseAPI as DBAPI
-from . import audioEdit as AudioEditor
 from . import gifEdit as GifEditor
 from PIL import Image
 from io import BytesIO
@@ -31,9 +30,9 @@ def imageUploadPage():
 def imageCropper():
     return render_template('imagecrop.html')
 
-@main.route('/audioEditor', methods=['GET'])
-def audioUploadPage():
-    return render_template('audio.html')
+@main.route('/videoEditor', methods=['GET'])
+def videoUploadPage():
+    return render_template('video.html')
 
 @main.route('/gifEditor')
 def gifUploadPage():
@@ -79,58 +78,6 @@ def gifEditor():
     encodedImage = base64.b64encode(BytesIOData.getvalue())
     print("Process Complete!")
     return { "imageFile": encodedImage.decode(), "extension": extension }
-
-@main.route('/audioEditor', methods=['POST'])
-def audioEditor():
-    soundFile = request.files.get("file")
-    print(soundFile)
-
-    # Acquire all data::
-    extensionV = request.form.get("extension")
-    speedV = request.form.get("speed")
-    startV = request.form.get("startTime")
-    endV = request.form.get("endTime")
-    defStartV = request.form.get("DEFAULTSTART")
-    defEndV = request.form.get("DEFAULTEND")
-
-    tempFiles = []
-
-    # ######## Generate Random File for Storage #########
-    generatedName = generateFileName(15)
-    filePath = generatedName + "." + soundFile.filename.split('.')[-1]
-    storedPath = generatedName + "-T"
-    soundFile.save(filePath)
-    tempFiles.append(filePath)
-    # ###################################################
-
-    # ## Load the File with Librosa
-    if(startV == defStartV and endV == defEndV):
-        print("-- No audio-cropping requested!")
-        y, sr = AudioEditor.loadFile(filePath, None, None)
-    else:
-        y, sr = AudioEditor.loadFile(filePath, startV, endV)
-    # ###################################################
-
-    if( not(speedV == "1") ):
-        print("-- Speed change was requested!")
-        y = AudioEditor.changeSpeed(y, sr, float(speedV))
-    AudioEditor.exportFile(y, sr, storedPath)
-    tempFiles.append(storedPath + ".wav")
-    # ###################################################
-
-    # Convert if required!
-    if( not(extensionV == ".wav") ):
-        print("-- Conversion required!")
-        AudioEditor.convertToExtension(storedPath + ".wav", storedPath, extensionV[1:])
-        tempFiles.append(storedPath + extensionV)
-        print("-- Conversion terminated!")
-    # --------------------
-
-    with open(storedPath + extensionV, "rb") as soundFile:
-        encodedSound = base64.b64encode(soundFile.read())
-
-    clearStorage(tempFiles)
-    return { "musicFile": encodedSound.decode(), "extension": extensionV }
 
 # Utilities !!
 def clearStorage(arrayFiles):
