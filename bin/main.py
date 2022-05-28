@@ -9,6 +9,7 @@ import base64
 import random
 import string
 import os
+from moviepy.editor import *
 
 # Supress some weird warnings used in Audio
 import warnings
@@ -33,6 +34,13 @@ def imageCropper():
 @main.route('/videoEditor', methods=['GET'])
 def videoUploadPage():
     return render_template('video.html')
+
+@main.route('/videoEditor', methods=['POST'])
+def videoEditor():
+    videoFile = request.files.get("file")
+    videoFile.save("./test.mp4")
+    clip = VideoFileClip("./test.mp4")
+    return "OK"
 
 @main.route('/gifEditor')
 def gifUploadPage():

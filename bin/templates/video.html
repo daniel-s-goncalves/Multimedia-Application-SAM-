@@ -118,29 +118,12 @@
     <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
   
     <script>
-      // Audio Editor - Section
-      const startTimeDisplay = document.getElementById("startTimeBox");
-      const endTimeDisplay = document.getElementById("endTimeBox");
-      // const pitchSlider = document.getElementById("pitchSlider");
-      // const pitchDisplayValue = document.getElementById("pitchDisplayValue");
       const speedSlider = document.getElementById("speedSlider");
       const speedDisplayValue = document.getElementById("speedDisplayValue")
-      const exportSelected = document.getElementById("exportSelected");
-      const extensions = document.getElementsByClassName("selectable-extension");
-
-      // Important
-      let maximumTime = 0;
-      let minimumTime = 0;
 
       // APPLY LISTENERS
-      for(let i = 0; i < extensions.length; i++)
-        extensions[i].addEventListener("click", setExtension);
       speedSlider.addEventListener("change", updateSpeed);
       // //////////////////////////////////////////////////////////////////////////
-
-      function setExtension(){
-        exportSelected.innerText = this.innerText;
-      }
       
       function updateSpeed(){
         speedDisplayValue.value = speedSlider.value;
@@ -194,32 +177,6 @@
     </script>
 
     <script>
-        // Audio player section
-        const progressBar = document.getElementById("progressBar");
-        const currentTime = document.getElementById("audioOngoing");
-        const maxDuration = document.getElementById("audioLength");
-        const playButtonA = document.getElementById("playButton");
-
-        // Event listeners and routines and applications
-        playButtonA.addEventListener("click", switchState);
-        // /////////////////////////////////////////////////////
-
-        // Control variables
-        let isPlaying = false;
-        // /////////////////////////////////////////////////////
-
-        function progressUpdate(){
-            if(!isPlaying)
-                return;
-
-            let progress = audioObject.currentTime / audioObject.duration;
-            currentTime.innerText = ("0" + getMinutes(audioObject.currentTime)).slice(-2) + ":" + ("0" + getSeconds(audioObject.currentTime)).slice(-2);
-            progressBar.style.width = (progress * 100) + "%";
-            setTimeout(progressUpdate, 250);
-        }
-    </script>
-
-    <script>
       // Audio Communication - Server
       document.getElementById("sendAudioCall").addEventListener("click", sendAudioServer);
 
@@ -227,16 +184,11 @@
         let fileD = fileUpload.files[0];
         let formData = new FormData();
         formData.append("file", fileD);
-        formData.append("extension", exportSelected.innerText == "Extension" ? ".mp3" : exportSelected.innerText)
-        formData.append("speed", speedSlider.value)
-        formData.append("startTime", startTimeDisplay.value)
-        formData.append("endTime", endTimeDisplay.value)
-        formData.append("DEFAULTSTART", minimumTime)
-        formData.append("DEFAULTEND", maximumTime)
+        formData.append("variableHere", "HelloWorld!")
 
         // Send Request
         var httpRequest = new XMLHttpRequest();
-        httpRequest.open("POST", '/audioEditor', true);
+        httpRequest.open("POST", '/videoEditor', true);
         //httpRequest.setRequestHeader("Content-Type", "multipart/form-data");
         httpRequest.onreadystatechange = function(){ 
             if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
