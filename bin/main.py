@@ -38,15 +38,20 @@ def videoUploadPage():
 
 @main.route('/videoEditor', methods=['POST'])
 def videoEditor():
-    print("HANDLING VIDEO EDITING PROCESS ... ", end = "")
     videoFile = request.files.get("file")
     tempFileName = generateFileName(25)
     tempFileNameFull = "./" + tempFileName + os.path.splitext(videoFile.filename)[1]
     videoFile.save(tempFileNameFull)
     clip = VideoFileClip(tempFileNameFull)
 
-    final = clip.fx(vfx.speedx, 0.25)
-    final.write_videofile("./" + tempFileName + "-t" +  os.path.splitext(videoFile.filename)[1], threads=4, logger=None, preset = 'fast')
+    clip2 = clip.resize(0.4)
+    final = clip2.fx(vfx.speedx, 0.75)
+    print("HANDLING AUDIO EDITING PROCESS ... ", end = "")
+    final.audio.write_audiofile("./" + tempFileName + ".mp3", logger=None)
+    print("Terminated!")    
+    print("HANDLING VIDEO EDITING PROCESS ... ", end = "")
+    final_clip = concatenate_videoclips([final])
+    final_clip.write_videofile("./" + tempFileName + "-t" +  os.path.splitext(videoFile.filename)[1], preset = 'fast')
     # Delete data
     clip.close()
     os.remove(tempFileNameFull)
