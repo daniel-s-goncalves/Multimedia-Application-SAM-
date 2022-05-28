@@ -1,3 +1,4 @@
+from cgi import FieldStorage
 from flask import Blueprint, render_template, request
 
 from . import databaseAPI as DBAPI
@@ -37,9 +38,19 @@ def videoUploadPage():
 
 @main.route('/videoEditor', methods=['POST'])
 def videoEditor():
+    print("HANDLING VIDEO EDITING PROCESS ... ", end = "")
     videoFile = request.files.get("file")
-    videoFile.save("./test.mp4")
-    clip = VideoFileClip("./test.mp4")
+    tempFileName = generateFileName(25)
+    tempFileNameFull = "./" + tempFileName + os.path.splitext(videoFile.filename)[1]
+    videoFile.save(tempFileNameFull)
+    clip = VideoFileClip(tempFileNameFull)
+
+    final = clip.fx(vfx.speedx, 0.25)
+    final.write_videofile("./" + tempFileName + "-t" +  os.path.splitext(videoFile.filename)[1], threads=4, logger=None, preset = 'fast')
+    # Delete data
+    clip.close()
+    os.remove(tempFileNameFull)
+    print("Terminated!")
     return "OK"
 
 @main.route('/gifEditor')
@@ -93,7 +104,7 @@ def clearStorage(arrayFiles):
         os.remove(file)
 
 def generateFileName(length):
-    characters = string.ascii_uppercase + string.digits
+    characters = string.ascii_lowercase + string.digits
     fileName = ''
     for i in range(length):
         fileName += random.choice(characters)
