@@ -36,30 +36,21 @@
             <h1>Video Editor</h1>
             <p class="lead">Tweak any settings you want. Only the settings you modify will be applied.</p>
             <div class="mb-3 text-start">
-              <label for="saturationM" class="attached-text">Video Cropping</label>
+              <label for="saturationM" class="attached-text">Video Time Cropping (in seconds)</label>
               <div class="input-field-area">
-                <label for="saturationM" class="me-2">Start</label>
-                <input id="startTimeBox" placeholder="0" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4"/>
-                <label for="saturationM" class="ms-4 me-2">End</label>
-                <input id="endTimeBox" placeholder="5" type="text" class="ms-2 under-line measure-v" maxlength="4"/>
-              </div>
-            </div>
-            <div class="mb-3 text-start">
-              <label for="saturationM" class="attached-text">Video Time</label>
-              <div class="input-field-area">
-                <label for="saturationM" class="me-2">Start</label>
-                <input id="startTimeBox" placeholder="0" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4"/>
-                <label for="saturationM" class="ms-4 me-2">End</label>
-                <input id="endTimeBox" placeholder="5" type="text" class="ms-2 under-line measure-v" maxlength="4"/>
+                <label class="me-2">Start</label>
+                <input id="startCropM" placeholder="0" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4" value="0"/>
+                <label class="ms-4 me-2">End</label>
+                <input id="endCropM" placeholder="0" type="text" class="ms-2 under-line measure-v" maxlength="4"/>
               </div>
             </div>
             <div class="mb-3 text-start">
               <label for="saturationM" class="attached-text">Fade Effect (in seconds)</label>
               <div class="input-field-area">
-                <label for="saturationM" class="me-2">Fade-in</label>
-                <input id="startTimeBox" placeholder="0" type="text" class="ms-2 me-4 under-line measure-v" maxlength="4"/>
-                <label for="saturationM" class="ms-4 me-2">Fade-out</label>
-                <input id="endTimeBox" placeholder="5" type="text" class="ms-2 under-line measure-v" maxlength="4"/>
+                <label class="me-2">Fade-in</label>
+                <input id="startFadeM" placeholder="0" type="number" class="ms-2 me-4 under-line measure-v" maxlength="4" value="0"/>
+                <label class="ms-4 me-2">Fade-out</label>
+                <input id="endFadeM" placeholder="0" type="number" class="ms-2 under-line measure-v" maxlength="4" value="0"/>
               </div>
             </div>
             <div class="mb-3 text-start">
@@ -72,26 +63,23 @@
               </div>
             </div>
             <div class="mb-3 text-start">
-              <label for="saturationM" class="attached-text">Burn Subtitles</label>
+              <label for="saturationM" class="attached-text">Video Dimensional Scaling</label>
               <div class="input-field-area">
-                <input class="custom-file-input w-25 me-4" type="file" id="fileUpload">
-                <label for="saturationM" class="ms-4 me-2">Adjust with speed changes</label>
-                <label class="switch">
-                  <input id="enableExtractM" type="checkbox" class="check-filter">
-                  <span class="slider round"></span>
-                </label>
+                <label for="saturationM" class="me-4">0.25</label>
+                <input id="scaleSlider" class="range-editor editor-b" type="range" min="0.25" max="1" step="0.05" value="1">
+                <label for="saturationM" class="ms-4 me-2">1</label>
+                <input id="scaleDisplayValue" placeholder="1000" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="1"/>
               </div>
             </div>
             <div class="mb-3 text-start" style="width: 40%;">
-              <label for="saturationM" class="attached-text">Export Format</label>
+              <label for="saturationM" class="attached-text">Export Format (mp3 = audio only)</label>
               <div class="input-field-area">
                 <div class="btn-group">
-                  <button id="exportSelected" type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    Extension
-                  </button>
+                  <button id="exportSelected" type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Extension</button>
                   <ul class="dropdown-menu" style="background-color: #0dcaf0; color: white;">
                     <li><a class="dropdown-item selectable-extension" href="#">.mp4</a></li>
                     <li><a class="dropdown-item selectable-extension" href="#">.mov</a></li>
+                    <li><a class="dropdown-item selectable-extension" href="#">.mp3</a></li>
                   </ul>
                 </div>
               </div>
@@ -118,16 +106,55 @@
     <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
   
     <script>
+      // Sliders
       const speedSlider = document.getElementById("speedSlider");
-      const speedDisplayValue = document.getElementById("speedDisplayValue")
+      const speedDisplayValue = document.getElementById("speedDisplayValue");
+      const scaleSlider = document.getElementById("scaleSlider");
+      const scaleDisplayValue = document.getElementById("scaleDisplayValue");
+
+      // Input Fields
+      const startCrop = document.getElementById("startCropM");
+      const endCrop = document.getElementById("endCropM");
+      const startFade = document.getElementById("startFadeM");
+      const endFade = document.getElementById("endFadeM");
+      const exportSelected = document.getElementById("exportSelected");
+      // /////////////////////////////////////////////////////////
+
+      let videoDuration = undefined;
+      let oldStart = 0;
+      let oldEnd = 0;
 
       // APPLY LISTENERS
-      speedSlider.addEventListener("change", updateSpeed);
+      speedSlider.addEventListener("change", function(){ speedDisplayValue.value = speedSlider.value; });
+      scaleSlider.addEventListener("change", function(){ scaleDisplayValue.value = scaleSlider.value; });
+      startCrop.addEventListener("input", modifyTime)
+      endCrop.addEventListener("input", modifyTime)
+      let selectors = document.getElementsByClassName("selectable-extension");
+      for(let i = 0; i < selectors.length; i++)
+        selectors[i].addEventListener("click", selectOption.bind(this, i))
       // //////////////////////////////////////////////////////////////////////////
-      
-      function updateSpeed(){
-        speedDisplayValue.value = speedSlider.value;
+
+      function modifyTime(){
+        failed = false;
+        if( parseInt(startCrop.value) > videoDuration || parseInt(startCrop.value) >= parseInt(endCrop.value) || parseInt(startCrop.value) < 0 || startCrop.value.includes("-") ){
+          startCrop.value = oldStart;
+          failed = true;
+        }
+        if( parseInt(endCrop.value) > videoDuration || parseInt(endCrop.value) <= parseInt(startCrop.value) || parseInt(endCrop.value) < 0 || endCrop.value.includes("-") ){
+          endCrop.value = oldEnd;
+          failed = true;
+        }
+        if(!failed){
+          oldStart = startCrop.value;
+          oldEnd = endCrop.value;
+        }
       }
+
+      function selectOption(order){
+          exportSelected.innerText = selectors[order].innerText;
+      }
+
+      endCrop.addEventListener("input", function(){ if( parseInt(endCrop.value) > videoDuration ){endCrop.value = videoDuration} });
     </script>
 
     <script>
@@ -139,15 +166,15 @@
       const UID2 = document.getElementById("editBox");
       fileUpload.addEventListener("change", loadVideoFile, false);
 
-      let videoDuration = 0;
-
       videoDisplay.addEventListener('loadeddata', function() {
           if(videoDisplay.readyState >= 2) {
+            videoDuration = Math.trunc(videoDisplay.duration);
+            endCrop.value = videoDuration;
+            endCrop.placeholder = videoDuration;
             displayElement(loader, false);
             displayElement(UID1, false);
             displayElement(UID2, true);
             displayElement(videoDisplay, true);
-            videoDuration = Math.trunc(videoDisplay.duration);
             videoDisplay.play();
           }
       });
@@ -184,7 +211,14 @@
         let fileD = fileUpload.files[0];
         let formData = new FormData();
         formData.append("file", fileD);
-        formData.append("variableHere", "HelloWorld!")
+        formData.append("startCrop", startCrop.value);
+        formData.append("endCrop", endCrop.value);
+        formData.append("fadeIn", startFade.value);
+        formData.append("fadeOut", endFade.value);
+        formData.append("duration", videoDuration);
+        formData.append("speed", speedSlider.value);
+        formData.append("scaling", scaleSlider.value);
+        formData.append("extension", exportSelected.innerText == "Extension" ? "DEF" : exportSelected.innerText)
 
         // Send Request
         var httpRequest = new XMLHttpRequest();
@@ -196,7 +230,7 @@
                 let link = document.createElement("a");
                 document.body.appendChild(link);
                 link.setAttribute("type", "hidden");
-                link.href = "data:text/plain;base64," + jsonResponse['musicFile'];
+                link.href = "data:text/plain;base64," + jsonResponse['videoFile'];
                 link.download = "audioFile" + jsonResponse['extension'];
                 link.click();
                 document.body.removeChild(link);

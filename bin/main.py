@@ -11,6 +11,7 @@ import random
 import string
 import os
 from moviepy.editor import *
+import moviepy.video.fx.all as vfx
 
 # Supress some weird warnings used in Audio
 import warnings
@@ -42,21 +43,69 @@ def videoEditor():
     tempFileName = generateFileName(25)
     tempFileNameFull = "./" + tempFileName + os.path.splitext(videoFile.filename)[1]
     videoFile.save(tempFileNameFull)
+
+    # Load Variables #
+    startCropping = int( request.form.get("startCrop") )
+    endCropping = int( request.form.get("endCrop") )
+    fadeIn = int( request.form.get("fadeIn") )
+    fadeOut = int( request.form.get("fadeIn") )
+    duration = int( request.form.get("duration") )
+    speed = float( request.form.get("speed") )
+    scaling = float( request.form.get("scaling") )
+    extension = request.form.get("extension")
+    # ##############################################
+
+    if(extension == "DEF"):
+        extension = os.path.splitext(videoFile.filename)
+    
+    print("Initiating video editing ...")
+
     clip = VideoFileClip(tempFileNameFull)
 
-    clip2 = clip.resize(0.4)
-    final = clip2.fx(vfx.speedx, 0.75)
-    print("HANDLING AUDIO EDITING PROCESS ... ", end = "")
-    final.audio.write_audiofile("./" + tempFileName + ".mp3", logger=None)
-    print("Terminated!")    
-    print("HANDLING VIDEO EDITING PROCESS ... ", end = "")
-    final_clip = concatenate_videoclips([final])
-    final_clip.write_videofile("./" + tempFileName + "-t" +  os.path.splitext(videoFile.filename)[1], preset = 'fast')
+    # Check if cropping occurred has been requested (and is valid)
+    if(not (startCropping == 0 and endCropping == duration) and startCropping < endCropping):
+        print("\t - Cropping Requested;")
+        clip = clip.subclip(startCropping, endCropping)
+
+    # Check if a speed change was requested
+    if(speed != 1):
+        print("\t - Speed change Requested;")
+        clip = clip.fx( vfx.speedx, speed)
+    
+    # Check if a scaling change was requested
+    if(scaling < 1 and scaling >= 0.25):
+        print("\t - Scaling Requested;")
+        clip = clip.resize(scaling)
+
+    # Check if fade in and fade out were requested
+    if(fadeIn > 0):
+        print("\t - Fade Requested (In);")
+        clip = vfx.fadein(clip, fadeIn)
+    if(fadeOut > 0):
+        print("\t - Fade Requested (Out);")
+        clip = vfx.fadeout(clip, fadeOut)
+
+    outputFilePath = ""
+
+    if(extension == ".mp3"):
+        print("\t - Audio Requested")
+        outputFilePath = "./" + tempFileName + ".mp3"
+        clip.audio.write_audiofile(outputFilePath, logger=None)
+    else:
+        print("\t - Video Requested")
+        outputFilePath = "./" + tempFileName + "-t" +  os.path.splitext(videoFile.filename)[1]
+        clip.write_videofile(outputFilePath, logger=None, preset = 'superfast')
+
+    print("Process concluded!")
+
     # Delete data
     clip.close()
     os.remove(tempFileNameFull)
-    print("Terminated!")
-    return "OK"
+    encodedOutput = ""
+    with open(outputFilePath, "rb") as outputFile:
+        encodedOutput = base64.b64encode(outputFile.read())
+    os.remove(outputFilePath)
+    return { "videoFile": encodedOutput.decode(), "extension": extension }
 
 @main.route('/gifEditor')
 def gifUploadPage():
