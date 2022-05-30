@@ -1,6 +1,11 @@
 /*
  * Globals
  */
+:root{
+  --style-background: #0a0e31;
+  --style-text-color: #ffffff;
+}
+
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -33,7 +38,7 @@ body {
 }
 
 .interactive-bg{
-  background-color: #0a0e31;
+  background-color: var(--style-background);
 }
 
 .cover-container {
@@ -107,16 +112,17 @@ body {
   background-color: rgb(11, 30, 223);
 }
 
-.input-field-area{
-  position: relative;
+.settings-box{
   width: 100%;
-  height: calc(65px - 10px);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1% 2.5%;
+}
+
+.input-field-area{
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 5%;
+  height: calc(65px - 10px);
 }
 
 .under-line{
@@ -519,7 +525,8 @@ input[type=checkbox].disabled-l{
   text-align: left;
   padding: 1rem;
   color: white;
-  border-radius: 0.25rem;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
   border: 0;
   transition: all 0.5s ease-in; 
   cursor: pointer;
@@ -534,4 +541,19 @@ input[type=checkbox].disabled-l{
 }
 .field-button label svg{
   width: 25px;
+}
+
+.fully-animated.overflow-auto::-webkit-scrollbar {
+  width: 7.5px;
+}
+
+.fully-animated.overflow-auto::-webkit-scrollbar-track {
+  background-color: #0dcaf0;
+  border-radius: 0px;
+}
+
+.fully-animated.overflow-auto::-webkit-scrollbar-thumb {
+  border-radius: 0px;
+  background-clip: content-box;
+  background-color: #353535;
 }

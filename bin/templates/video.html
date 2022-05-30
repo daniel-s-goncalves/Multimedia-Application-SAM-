@@ -31,7 +31,7 @@
 
     <div class="row m-0 text-center text-white border-top border-info flex-nowrap" style="height: 90vh; width: 100vw;">
       <div class="col-xl-12 fully-animated overflow-auto h-100" id="uploadBox">
-        <div class="cover-container d-flex w-100 p-3 mx-auto flex-column align-items-center justify-content-center">
+        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column align-items-center justify-content-center">
           <div id="mainBox">
             <h1>Upload Video.</h1>
             <p class="lead">Upload your video file. The preview will be available on the right.</p>
@@ -41,7 +41,7 @@
             </div>
           </div>
 
-          <div id="editBox" class="visually-hidden" style="width: 80%;">
+          <div id="editBox" class="visually-hidden" style="width: 80%; height: 100%;">
             <h1>Video Editor</h1>
             <p class="lead">Tweak any settings you want. Only the settings you modify will be applied.</p>
             
@@ -59,15 +59,24 @@
                 </svg>
               </div>
               <div class="collapse">
-                <div class="input-field-area">
-                  <div>
-                    <label class="me-1">Start</label>
-                    <input id="startCropM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
+                <div class="settings-box">
+                  <div class="input-field-area">
+                    <div>
+                      <label class="me-1">Start</label>
+                      <input id="startCropM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
+                    </div>
+                    <div>
+                      <label class="me-1">End</label>
+                      <input id="endCropM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
+                    </div>
                   </div>
-                  <div>
-                    <label class="me-1">End</label>
-                    <input id="endCropM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
-                  </div>
+                  <label class="attached-text mt-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                    </svg>
+                    The video will be cropped down to your specified interval.
+                  </label>
                 </div>
               </div>
             </div>
@@ -85,15 +94,24 @@
                 </svg>
               </div>
               <div class="collapse" >
-                <div class="input-field-area">
-                  <div>
-                    <label class="me-1">Fade In</label>
-                    <input id="startFadeM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
+                <div class="settings-box">
+                  <div class="input-field-area">
+                    <div>
+                      <label class="me-1">Fade In</label>
+                      <input id="startFadeM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
+                    </div>
+                    <div>
+                      <label class="me-1">Fade Out</label>
+                      <input id="endFadeM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
+                    </div>
                   </div>
-                  <div>
-                    <label class="me-1">Fade Out</label>
-                    <input id="endFadeM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
-                  </div>
+                  <label class="attached-text mt-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                    </svg>
+                    Define a fading effect (from black) at the start and end of the video.
+                  </label>
                 </div>
               </div>
             </div>
@@ -112,11 +130,20 @@
                 </svg>
               </div>
               <div class="collapse" >
-                <div class="input-field-area">
-                  <label class="me-4">0.5</label>
-                  <input id="speedSlider" class="range-editor editor-b" type="range" min="0.5" max="2.5" step="0.25" value="1" id="speedM">
-                  <label class="ms-4 me-2">2.5</label>
-                  <input id="speedDisplayValue" placeholder="1000" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="1"/>
+                <div class="settings-box">
+                  <div class="input-field-area">
+                    <label class="me-4">0.5</label>
+                    <input id="speedSlider" class="range-editor editor-b" type="range" min="0.5" max="2.5" step="0.25" value="1" id="speedM">
+                    <label class="ms-4 me-2">2.5</label>
+                    <input id="speedDisplayValue" placeholder="1000" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="1"/>
+                  </div>
+                  <label class="attached-text mt-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                    </svg>
+                    A value higher than 1 will increase the video's speed.
+                  </label>
                 </div>
               </div>
             </div>
@@ -135,11 +162,20 @@
                 </svg>
               </div>
               <div class="collapse" >
-                <div class="input-field-area">
-                  <label class="me-4">0.25</label>
-                  <input id="scaleSlider" class="range-editor editor-b" type="range" min="0.25" max="1" step="0.05" value="1">
-                  <label class="ms-4 me-2">1</label>
-                  <input id="scaleDisplayValue" placeholder="1000" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="1"/>
+                <div class="settings-box">
+                  <div class="input-field-area">
+                    <label class="me-4">0.25</label>
+                    <input id="scaleSlider" class="range-editor editor-b" type="range" min="0.25" max="1" step="0.05" value="1">
+                    <label class="ms-4 me-2">1</label>
+                    <input id="scaleDisplayValue" placeholder="1000" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="1"/>
+                  </div>
+                  <label class="attached-text mt-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                    </svg>
+                    The value will be multiplified with the original resolution of the video.
+                  </label>
                 </div>
               </div>
             </div>
@@ -158,15 +194,24 @@
                 </svg>
               </div>
               <div class="collapse">
-                <div class="input-field-area">
-                  <div>
-                    <label class="me-1">Fade In</label>
-                    <input id="startFadeAM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
+                <div class="settings-box">
+                  <div class="input-field-area">
+                    <div>
+                      <label class="me-1">Fade In</label>
+                      <input id="startFadeAM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
+                    </div>
+                    <div>
+                      <label class="me-1">Fade Out</label>
+                      <input id="endFadeAM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
+                    </div>
                   </div>
-                  <div>
-                    <label class="me-1">Fade Out</label>
-                    <input id="endFadeAM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
-                  </div>
+                  <label class="attached-text mt-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                    </svg>
+                    This setting will only apply to the audio component.
+                  </label>
                 </div>
               </div>
             </div>
@@ -174,8 +219,10 @@
             <div class="mb-3 text-start">
               <div class="field-button d-flex justify-content-between align-items-center">
                 <label>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-soundwave me-2" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8.5 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11a.5.5 0 0 1 .5-.5zm-2 2a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm4 0a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm-6 1.5A.5.5 0 0 1 5 6v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm8 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm-10 1A.5.5 0 0 1 3 7v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5zm12 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5z"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-volume-up" viewBox="0 0 16 16">
+                    <path d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476 7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
+                    <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483 5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z"/>
+                    <path d="M10.025 8a4.486 4.486 0 0 1-1.318 3.182L8 10.475A3.489 3.489 0 0 0 9.025 8c0-.966-.392-1.841-1.025-2.475l.707-.707A4.486 4.486 0 0 1 10.025 8zM7 4a.5.5 0 0 0-.812-.39L3.825 5.5H1.5A.5.5 0 0 0 1 6v4a.5.5 0 0 0 .5.5h2.325l2.363 1.89A.5.5 0 0 0 7 12V4zM4.312 6.39 6 5.04v5.92L4.312 9.61A.5.5 0 0 0 4 9.5H2v-3h2a.5.5 0 0 0 .312-.11z"/>
                   </svg>
                   Change audio volume
                 </label>
@@ -184,27 +231,41 @@
                 </svg>
               </div>
               <div class="collapse">
-                <div class="input-field-area">
-                  <label class="me-4">0.25</label>
-                  <input id="volumeSlider" class="range-editor editor-b" type="range" min="0.25" max="2" step="0.05" value="1">
-                  <label class="ms-4 me-2">2</label>
-                  <input id="volumeDisplayValue" placeholder="1000" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="1"/>
+                <div class="settings-box">
+                  <div class="input-field-area">
+                    <label class="me-4">0.25</label>
+                    <input id="volumeSlider" class="range-editor editor-b" type="range" min="0.25" max="2" step="0.05" value="1">
+                    <label class="ms-4 me-2">2</label>
+                    <input id="volumeDisplayValue" placeholder="1000" type="text" class="ms-4 under-line measure-v disabled-l" maxlength="4" value="1"/>
+                  </div>
+                  <label class="attached-text mt-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                      <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                    </svg>
+                    A value higher than 1 will increase the volume.
+                  </label>
                 </div>
               </div>
             </div>
 
-            <div class="mb-3 text-start" style="width: 40%;">
-              <label for="saturationM" class="attached-text">Export Format (mp3 = audio only)</label>
-              <div class="input-field-area">
-                <div class="btn-group">
-                  <button id="exportSelected" type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Extension</button>
-                  <ul class="dropdown-menu" style="background-color: #0dcaf0; color: white;">
-                    <li><a class="dropdown-item selectable-extension" href="#">.mp4</a></li>
-                    <li><a class="dropdown-item selectable-extension" href="#">.mov</a></li>
-                    <li><a class="dropdown-item selectable-extension" href="#">.mp3</a></li>
-                  </ul>
-                </div>
+            <div class="mb-3 text-start">
+              <label for="saturationM" class="attached-text mb-1" style="display: block;">Export Format</label>
+              <div class="btn-group">
+                <button id="exportSelected" type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Extension</button>
+                <ul class="dropdown-menu" style="background-color: #0dcaf0; color: white;">
+                  <li><a class="dropdown-item selectable-extension" href="#">.mp4</a></li>
+                  <li><a class="dropdown-item selectable-extension" href="#">.mov</a></li>
+                  <li><a class="dropdown-item selectable-extension" href="#">.mp3</a></li>
+                </ul>
               </div>
+              <label class="attached-text mt-2" style="display: block;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                </svg>
+                The MP3 format will only output audio modifications.
+              </label>
             </div>
 
           </div>

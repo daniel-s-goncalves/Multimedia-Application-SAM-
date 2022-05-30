@@ -89,7 +89,7 @@ def videoEditor():
         print("\t - Fade Requested (Out);")
         clip = vfx.fadeout(clip, fadeOut)
 
-    soundClipStorage = 0
+    soundClipStorage = clip.audio
     if(fadeInA > 0):
         print("\t - Audio Fade Requested (In);")
         soundClipStorage = afx.audio_fadein(clip.audio, fadeInA)
