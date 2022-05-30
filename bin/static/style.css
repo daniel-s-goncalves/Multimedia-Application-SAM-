@@ -112,7 +112,7 @@ body {
   width: 100%;
   height: calc(65px - 10px);
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 8px;
@@ -482,7 +482,56 @@ input[type=checkbox].disabled-l{
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
 }
 
+.fully-animated{
+  transition: all 0.5s ease-in;
+}
+
 .w-0{
   width: 0px !important;
   display: none;
+}
+
+.card-override{
+  background-color: transparent !important;
+  border-radius: 0px !important;
+  color: white !important;
+  text-shadow: none !important;
+  background-clip: unset !important;
+  border: none !important;
+}
+
+.text-input{
+  font-size: .88888889rem;
+  text-align: center;
+  color: #d2d3d4;
+  background: transparent;
+  border: 2px solid;
+  border-radius: 4px;
+  width: 6rem;
+  height: 2rem;
+  outline: none;
+  border-color: #404144;
+}
+
+.field-button{
+  width: 100%;
+  background-color: #272843;
+  text-align: left;
+  padding: 1rem;
+  color: white;
+  border-radius: 0.25rem;
+  border: 0;
+  transition: all 0.5s ease-in; 
+  cursor: pointer;
+}
+
+.field-button:hover{
+  background-color: gray;
+}
+
+.field-button label{
+  width: 75%;
+}
+.field-button label svg{
+  width: 25px;
 }
