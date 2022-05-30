@@ -53,6 +53,10 @@ def videoEditor():
     speed = float( request.form.get("speed") )
     scaling = float( request.form.get("scaling") )
     extension = request.form.get("extension")
+
+    fadeInA = int( request.form.get("fadeIn") )
+    fadeOutA = int( request.form.get("fadeOut") )
+    volume = float( request.form.get("volume") )
     # ##############################################
 
     if(extension == "DEF"):
@@ -85,6 +89,18 @@ def videoEditor():
         print("\t - Fade Requested (Out);")
         clip = vfx.fadeout(clip, fadeOut)
 
+    soundClipStorage = 0
+    if(fadeInA > 0):
+        print("\t - Audio Fade Requested (In);")
+        soundClipStorage = afx.audio_fadein(clip.audio, fadeInA)
+    if(fadeOutA > 0):
+        print("\t - Audio Fade Requested (Out);")
+        soundClipStorage = afx.audio_fadeout(soundClipStorage, fadeOutA)
+    if(volume != 1 and volume >= 0.25 and volume <= 2):
+        print("\t - Audio Volume Scale Requested;")
+        soundClipStorage = afx.volumex(soundClipStorage, volume)
+    
+    clip.audio = soundClipStorage
     outputFilePath = ""
 
     if(extension == ".mp3"):
