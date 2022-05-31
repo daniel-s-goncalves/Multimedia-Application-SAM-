@@ -82,6 +82,7 @@ def videoEditor():
         clip = clip.resize(scaling)
 
     # Check if fade in and fade out were requested
+    soundClipStorage = clip.audio
     if(fadeIn > 0):
         print("\t - Fade Requested (In);")
         clip = vfx.fadein(clip, fadeIn)
@@ -89,7 +90,6 @@ def videoEditor():
         print("\t - Fade Requested (Out);")
         clip = vfx.fadeout(clip, fadeOut)
 
-    soundClipStorage = clip.audio
     if(fadeInA > 0):
         print("\t - Audio Fade Requested (In);")
         soundClipStorage = afx.audio_fadein(clip.audio, fadeInA)
