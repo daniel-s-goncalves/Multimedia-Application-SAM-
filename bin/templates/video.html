@@ -317,14 +317,6 @@
   </script>
 
   <script>
-    const buttonCollapse = document.getElementsByClassName("field-button");
-    const collapseElementList = document.querySelectorAll('.collapse');
-    const collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl, { toggle: false }));
-    for(let i = 0; i < buttonCollapse.length; i++)
-      buttonCollapse[i].addEventListener("click", function(){ collapseList[i].toggle(); })
-  </script>
-
-  <script>
     const fileUpload = document.getElementById("fileUpload");
     const loader = document.getElementById("loadingView");
     const videoDisplay = document.getElementById("video");

@@ -68,20 +68,28 @@
     </div>
   </body>
   
-    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
 
-    <script>
-      const uploadBox = document.getElementById("uploadBox");
-      const previewBox = document.getElementById("previewBox");
+  <script>
+    const buttonCollapse = document.getElementsByClassName("field-button");
+    const collapseElementList = document.querySelectorAll('.collapse');
+    const collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl, { toggle: false }));
+    for(let i = 0; i < buttonCollapse.length; i++)
+      buttonCollapse[i].addEventListener("click", function(){ collapseList[i].toggle(); })
+  </script>
 
-      function adjustApplication(){
-        uploadBox.classList.remove("col-xl-12")
-        uploadBox.classList.add("col-xl-5")
-        previewBox.classList.remove("w-0", "visually-hidden")
-      }
-    </script>
+  <script>
+    const uploadBox = document.getElementById("uploadBox");
+    const previewBox = document.getElementById("previewBox");
 
-    {% block scripts %}
-      <!-- Script Section -->
-    {% endblock %}
+    function adjustApplication(){
+      uploadBox.classList.remove("col-xl-12")
+      uploadBox.classList.add("col-xl-5")
+      previewBox.classList.remove("w-0", "visually-hidden")
+    }
+  </script>
+
+  {% block scripts %}
+    <!-- Script Section -->
+  {% endblock %}
 </html>
