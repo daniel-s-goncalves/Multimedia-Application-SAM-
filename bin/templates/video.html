@@ -328,8 +328,6 @@
     const fileUpload = document.getElementById("fileUpload");
     const loader = document.getElementById("loadingView");
     const videoDisplay = document.getElementById("video");
-    const uploadBox = document.getElementById("uploadBox");
-    const previewBox = document.getElementById("previewBox");
 
     const UID1 = document.getElementById("mainBox");
     const UID2 = document.getElementById("editBox");
@@ -344,9 +342,7 @@
           displayElement(UID1, false);
           displayElement(UID2, true);
           displayElement(videoDisplay, true);
-          uploadBox.classList.remove("col-xl-12")
-          uploadBox.classList.add("col-xl-5")
-          previewBox.classList.remove("w-0", "visually-hidden")
+          adjustApplication();
           videoDisplay.play();
         }
     });
