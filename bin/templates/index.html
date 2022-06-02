@@ -31,26 +31,25 @@
                     <div>
                         <div class="dark-box"></div>
                         <div class="content-display d-flex flex-column align-items-center justify-content-center">
-                            <h2 class="display-title">Video Editor</h2>
-                            <p class="show-exist mb-4">Speed up your video, change its audio ... anything!</p>
+                            <h2 class="display-title">Video & Audio Editor</h2>
+                            <p class="show-exist mb-4">Speed up your video, change an audio file ... anything!</p>
                             <div class="show-exist mt-4 d-flex justify-content-around w-50">
                                 <button type="button" class="btn btn-outline-info">Let's go!</button>
                             </div>
                         </div>
                     </div>
                 </a>
-                <a href="{{url_for('main.gifUploadPage')}}" class="col-4 m-0 h-100 gif-display disp-b">
-                    <div>
-                        <div class="dark-box"></div>
-                        <div class="content-display d-flex flex-column align-items-center justify-content-center">
-                            <h2 class="display-title">GIF Editor</h2>
-                            <p class="show-exist mb-4">All essential tools for GIF editting in one place.</p>
-                            <div class="show-exist mt-4 d-flex justify-content-around w-50">
-                                <button type="button" class="btn btn-outline-info">Edit GIF file</button>
-                            </div>
+                <div class="col-4 m-0 h-100 gif-display disp-b">
+                    <div class="dark-box"></div>
+                    <div class="content-display d-flex flex-column align-items-center justify-content-center">
+                        <h2 class="display-title">Animation Editor</h2>
+                        <p class="show-exist mb-4">Modify GIF animations or create an animation yourself!</p>
+                        <div class="show-exist mt-4 d-flex justify-content-around w-50">
+                            <a href="{{url_for('main.gifUploadPage')}}"><button type="button" class="btn btn-outline-info">GIF Editor</button></a>
+                            <a href="{{url_for('main.animator')}}"><button type="button" class="btn btn-outline-info">Animator</button></a>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
     </body>

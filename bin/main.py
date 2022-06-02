@@ -168,6 +168,14 @@ def gifEditor():
     print("Process Complete!")
     return { "imageFile": encodedImage.decode(), "extension": extension }
 
+@main.route('/animator', methods=['GET'])
+def animator():
+    return render_template('animator.html')
+
+@main.route('/animator', methods=['POST'])
+def animationUploadPage():
+    return "OK"
+
 # Utilities !!
 def clearStorage(arrayFiles):
     for file in arrayFiles:

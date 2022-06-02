@@ -40,7 +40,7 @@
             <h1>{% block uploadTitle %}Upload{% endblock %}</h1>
             <p class="lead">{% block uploadMessage %}Upload message goes here{% endblock %}</p>
             <div class="mb-3">
-              <input class="form-control" style="width: 15rem; margin: auto;" type="file" id="fileUpload">
+              <input class="form-control" style="width: 15rem; margin: auto;" type="file" id="fileUpload" multiple>
               <div id="loadingView" class="spinner-border visually-hidden" role="status"></div>
             </div>
           </div>
@@ -57,7 +57,7 @@
         <h2>{% block previewTitle %}Preview{% endblock %}</h2>
 
         {% block previewElements %}
-          <!-- Add preview stuff here-->
+          
         {% endblock %}
 
         {% block previewButtons %}
@@ -76,6 +76,20 @@
     const collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl, { toggle: false }));
     for(let i = 0; i < buttonCollapse.length; i++)
       buttonCollapse[i].addEventListener("click", function(){ collapseList[i].toggle(); })
+    
+    function displayElement(element, showOnScreen){
+      if(showOnScreen)
+        element.classList.remove("visually-hidden");
+      else
+        element.classList.add("visually-hidden");
+    }
+
+    function enableElement(element, enable){
+      if(enable)
+        element.classList.remove("disabled-l");
+      else
+        element.classList.add("disabled-l");
+    }
   </script>
 
   <script>

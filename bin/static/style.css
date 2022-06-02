@@ -557,3 +557,28 @@ input[type=checkbox].disabled-l{
   background-clip: content-box;
   background-color: #353535;
 }
+
+.list-inline{
+    width: 135px;
+    height: 140px;
+    border: 1px solid #000;
+    display: inline-block;
+    margin-bottom: 5px;
+    background-color: #2d2d2d;
+    border-radius: 0.8rem;
+}
+
+.left-align{
+    text-align: left !important;
+    margin-left: 0.25rem !important;
+    margin-top: 0.25rem !important;
+    margin-bottom: 0 !important;
+}
+
+.tiny-input{
+    width: 40px;
+    padding: 3px;
+    margin-right: 5px;
+    font-size: 11px;
+    height: 20px;
+}

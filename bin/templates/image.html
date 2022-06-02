@@ -166,10 +166,9 @@
 
 {% block previewElements %}
   <div class="mt-4 mb-4" style="width: 400px; height: 400px; background-color: black; display: flex;">
-    <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"/>
+    <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"></canvas>
   </div>
-  <canvas width="500" height="500" id="realCanvas" class="visually-hidden"/>
-
+  <canvas width="500" height="500" id="realCanvas" class="visually-hidden"></canvas>
 {% endblock %}
 
 {% block previewButtons %}
@@ -245,20 +244,6 @@
     // Assign for global use
     imageWidth = width;
     imageHeight = height;
-  }
-
-  function displayElement(element, showOnScreen){
-    if(showOnScreen)
-      element.classList.remove("visually-hidden");
-    else
-      element.classList.add("visually-hidden");
-  }
-
-  function enableElement(element, enable){
-    if(enable)
-      element.classList.remove("disabled-l");
-    else
-      element.classList.add("disabled-l");
   }
 </script>
 

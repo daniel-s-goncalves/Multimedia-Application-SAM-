@@ -221,9 +221,9 @@
     <div class="btn-group">
       <button id="exportSelected" type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Extension</button>
       <ul class="dropdown-menu" style="background-color: #0dcaf0; color: white;">
+        <li><a class="dropdown-item selectable-extension" href="#">.mp3</a></li>
         <li><a class="dropdown-item selectable-extension" href="#">.mp4</a></li>
         <li><a class="dropdown-item selectable-extension" href="#">.mov</a></li>
-        <li><a class="dropdown-item selectable-extension" href="#">.mp3</a></li>
       </ul>
     </div>
     <label class="attached-text mt-2" style="display: block;">
@@ -346,20 +346,6 @@
       
       let videoObject = URL.createObjectURL(videoFile);
       videoDisplay.src = videoObject
-    }
-
-    function displayElement(element, showOnScreen){
-      if(showOnScreen)
-        element.classList.remove("visually-hidden");
-      else
-        element.classList.add("visually-hidden");
-    }
-
-    function enableElement(element, enable){
-      if(enable)
-        element.classList.remove("disabled-l");
-      else
-        element.classList.add("disabled-l");
     }
   </script>
 
