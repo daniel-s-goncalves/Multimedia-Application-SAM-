@@ -1,7 +1,23 @@
 /*
  * Globals
  */
+:root{
+  --style-background: #0a0e31;
+  --style-text-color: #ffffff;
+}
 
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 
 /* Custom default button */
 .btn-secondary,
@@ -22,7 +38,7 @@ body {
 }
 
 .interactive-bg{
-  background-color: #0a0e31;
+  background-color: var(--style-background);
 }
 
 .cover-container {
@@ -96,16 +112,17 @@ body {
   background-color: rgb(11, 30, 223);
 }
 
-.input-field-area{
-  position: relative;
+.settings-box{
   width: 100%;
-  height: calc(65px - 10px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 5%;
+  padding: 1% 2.5%;
+}
+
+.input-field-area{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: calc(65px - 10px);
 }
 
 .under-line{
@@ -240,7 +257,7 @@ input[type=checkbox].disabled-l{
 }
 
 .audio-display{
-  background: url('/static/audioWallpaper.jpg') no-repeat;
+  background: url('/static/videoWallpaper.jpg') no-repeat;
   background-size: cover;
 }
 
@@ -436,3 +453,154 @@ input[type=checkbox].disabled-l{
   background: rgba(255, 255, 255, 0.08);
   padding: 1% 2.5%;
 }
+
+.custom-file-input {
+  color: transparent;
+}
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: 'Select subtitle';
+  color: #0dcaf0;
+  display: inline-block;
+  background: transparent;
+  border: 1px solid #0dcaf0;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 10pt;
+  width: 100%;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+}
+.custom-file-input:hover::before {
+  background: #0dcaf0;
+  color: black;
+}
+.custom-file-input:active {
+  outline: 0;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+}
+
+.fully-animated{
+  transition: all 0.5s ease-in;
+}
+
+.w-0{
+  width: 0px !important;
+  display: none;
+}
+
+.card-override{
+  background-color: transparent !important;
+  border-radius: 0px !important;
+  color: white !important;
+  text-shadow: none !important;
+  background-clip: unset !important;
+  border: none !important;
+}
+
+.text-input{
+  font-size: .88888889rem;
+  text-align: center;
+  color: #d2d3d4;
+  background: transparent;
+  border: 2px solid;
+  border-radius: 4px;
+  width: 6rem;
+  height: 2rem;
+  outline: none;
+  border-color: #404144;
+}
+
+.field-button{
+  width: 100%;
+  background-color: #272843;
+  text-align: left;
+  padding: 1rem;
+  color: white;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  border: 0;
+  transition: all 0.5s ease-in; 
+  cursor: pointer;
+}
+
+.field-button:hover{
+  background-color: gray;
+}
+
+.field-button label{
+  width: 75%;
+}
+.field-button label svg{
+  width: 25px;
+}
+
+.fully-animated.overflow-auto::-webkit-scrollbar {
+  width: 7.5px;
+}
+
+.fully-animated.overflow-auto::-webkit-scrollbar-track {
+  background-color: #0dcaf0;
+  border-radius: 0px;
+}
+
+.fully-animated.overflow-auto::-webkit-scrollbar-thumb {
+  border-radius: 0px;
+  background-clip: content-box;
+  background-color: #353535;
+}
+
+.list-inline{
+    width: 130px;
+    height: 140px;
+    border: 1px solid #000;
+    display: inline-block;
+    margin: 2.5px;
+    background-color: #2d2d2d;
+    border-radius: 0.8rem;
+}
+
+.left-align{
+    text-align: left !important;
+    margin-left: 0.25rem !important;
+    margin-top: 0.25rem !important;
+    margin-bottom: 0 !important;
+}
+
+.tiny-input{
+    width: 40px;
+    padding: 3px;
+    margin-right: 5px;
+    font-size: 11px;
+    height: 20px;
+}
+
+.animator-container{
+  width: 755px; 
+  max-height: 450px; 
+  overflow-y: scroll;
+}
+
+.animator-container::-webkit-scrollbar {
+  width: 7.5px;
+}
+
+.animator-container::-webkit-scrollbar-track {
+  background-color: #0dcaf0;
+  border-radius: 0px;
+}
+
+.animator-container::-webkit-scrollbar-thumb {
+  border-radius: 0px;
+  background-clip: content-box;
+  background-color: #353535;
+}
+

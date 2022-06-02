@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block complementaryTitle %}| Animator{% endblock %}
+
+{% block head %}  {% endblock %}
+
+{% block pagetype %}Animator{% endblock %}
+{% block pagetitles %}Animator{% endblock %}
+
+{% block uploadTitle %}Upload Images{% endblock %}
+
+{% block uploadMessage %}We will load these images on the right and you will be able to specify your settings.{% endblock %}
+
+{% block editingFeatures %}
+    <div class="mb-3 text-start mt-4">
+    <div class="field-button d-flex justify-content-between align-items-center">
+        <label>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-clock-history me-2" viewBox="0 0 16 16">
+          <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
+          <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
+          <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>
+        </svg>
+        Frame Delay
+        </label>
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+        </svg>
+    </div>
+    <div class="collapse">
+        <div class="settings-box">
+        <div class="input-field-area">
+            <div>
+              <label class="me-1">FPS: </label>
+              <input id="fpsM" placeholder="40" type="text" class="text-input measure-v ms-1" maxlength="4" value="40"/>
+            </div>
+            <div>
+              <label class="me-1">Delay (ms):</label>
+              <input id="delayM" placeholder="25" type="text" class="text-input measure-v ms-1" maxlength="4" value="25"/>
+            </div>
+        </div>
+        <label class="attached-text mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+            </svg>
+            Modifying one input will automatically adjust the other.
+        </label>
+        </div>
+    </div>
+    </div>
+
+    <div class="mb-3 text-start">
+      <div class="field-button d-flex justify-content-between align-items-center">
+        <label>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-bar-contract me-2" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M3.646 14.854a.5.5 0 0 0 .708 0L8 11.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708zm0-13.708a.5.5 0 0 1 .708 0L8 4.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zM1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8z"/>
+          </svg>
+          Frame Range
+        </label>
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+        </svg>
+      </div>
+      <div class="collapse">
+        <div class="settings-box">
+          <div class="input-field-area">
+            <div>
+              <label class="me-1">Start</label>
+              <input id="startCropM" placeholder="0" type="number" class="text-input measure-v ms-1" maxlength="4" value="0" previousValue="0"/>
+            </div>
+            <div>
+              <label class="me-1">End</label>
+              <input id="endCropM" placeholder="MAX" type="number" class="text-input measure-v ms-1" maxlength="4" value="MAX" previousValue="0"/>
+            </div>
+          </div>
+          <label class="attached-text mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+            </svg>
+            The animation will be cropped to your specified interval.
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3 text-start">
+        <div class="field-button d-flex justify-content-between align-items-center">
+          <label>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-clockwise me-2" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+              <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+            </svg>
+            Loop Count
+          </label>
+          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+          </svg>
+        </div>
+        <div class="collapse">
+          <div class="settings-box">
+            <div class="input-field-area" style="justify-content: start !important;">
+              <div class="ms-4">
+                <label class="me-1">Count:</label>
+                <input id="loopsM" placeholder="0" type="text" class="text-input measure-v ms-1" maxlength="4" value="0"/>
+              </div>
+            </div>
+            <label class="attached-text mt-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+              </svg>
+              Setting a value lower or equal to 0 will imply infinite loops.
+            </label>
+          </div>
+        </div>
+      </div>
+{% endblock %}
+
+
+{% block previewTitle %}Uploaded Images{% endblock %}
+
+{% block previewElements %}
+    <div class="mt-4 mb-4 animator-container">
+        <ul id="imageListings">
+
+        <ul>
+    </div>
+{% endblock %}
+
+{% block previewButtons %}
+  <a href="#" class="mt-2">
+    <button type="button" class="btn btn-outline-info" id="sendAnimatorCall">
+      <span class="loading-save spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
+      Create Animation
+    </button>
+  </a>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const startCropM = document.getElementById("startCropM");
+  const endCropM = document.getElementById("endCropM");
+  let frameCount = 0;
+
+  function commitValues(){
+    startCropM.setAttribute("previousValue", parseInt(startCropM.value) );
+    endCropM.setAttribute("previousValue", parseInt(endCropM.value) );
+  }
+
+  function pullStoredValues(){
+    startCropM.value = parseInt( startCropM.getAttribute("previousValue") );
+    endCropM.value = parseInt( endCropM.getAttribute("previousValue") );
+  }
+</script>
+
+<script>
+    const fileUpload = document.getElementById("fileUpload");
+    const loader = document.getElementById("loadingView");
+    const imageListings = document.getElementById("imageListings");
+
+    const UID1 = document.getElementById("mainBox");
+    const UID2 = document.getElementById("editBox");
+    let uploadedFrames = document.getElementsByClassName("none");
+    let frameDelayUniq = uploadedFrames;
+    fileUpload.addEventListener("change", loadImages, false);
+
+    function loadImages(){
+        displayElement(fileUpload, false)
+        displayElement(loader, true)
+
+        for(let i = 0; i < this.files.length; i++){
+            imageListings.innerHTML += `
+            <li class="list-inline individual-frame">
+                <h6 class="left-align">` + i + `</h6>
+                <img src="`+ URL.createObjectURL(this.files[i]) + `" width="75" height="75"/>
+                <label class="mt-2"> Delay: <input type="text" value="25" class="tiny-input individual-delay"> </label>
+            </li>
+            `
+            displayElement(loader, false);
+            displayElement(UID1, false);
+            displayElement(UID2, true);
+            adjustApplication();
+
+            uploadedFrames = document.getElementsByClassName("individual-frame");
+            frameDelayUniq = document.getElementsByClassName("individual-delay");
+        }
+
+        frameCount = this.files.length;
+        endCropM.value = frameCount - 1;
+        commitValues();
+    }
+  </script>
+
+  <script>
+      const fpsM = document.getElementById("fpsM");
+      const delayM = document.getElementById("delayM");
+      const loopsM = document.getElementById("loopsM");
+
+      fpsM.addEventListener("blur", validateDelay.bind(this, true));
+      delayM.addEventListener("blur", validateDelay.bind(this, false));
+      startCropM.addEventListener("blur", validateCrop)
+      endCropM.addEventListener("blur", validateCrop)
+
+      function validateDelay(isFPS){
+        if(isFPS)
+          delayM.value = Math.round(1 / fpsM.value * 10000) / 10;
+        else
+          fpsM.value = Math.round(1 / delayM.value * 10000) / 10;
+        // Apply Universal Delay
+        for(let i = 0; i < frameDelayUniq.length; i++)
+          frameDelayUniq[i].value = delayM.value;
+      }
+
+      function validateCrop(){
+        if( parseInt(startCropM.value) < 0 || parseInt(startCropM.value) > parseInt(endCropM.value) || parseInt(startCropM.value) >= frameCount ){
+          pullStoredValues();
+          return;
+        }
+        if( parseInt(endCropM.value) < 0 || parseInt(endCropM.value) < parseInt(startCropM.value) || parseInt(endCropM.value) >= frameCount ){
+          pullStoredValues();
+          return;
+        }
+        commitValues();
+        for(let i = 0; i < uploadedFrames.length; i++)
+          if(i < parseInt(startCropM.value) )
+            uploadedFrames[i].style.display = "none";
+          else if(i > endCropM.value)
+            uploadedFrames[i].style.display = "none";
+          else 
+            uploadedFrames[i].style.display = "inline-block";
+      }
+  </script>
+
+  <script>
+    document.getElementById("sendAnimatorCall").addEventListener("click", sendAnimatorCall);
+
+    function sendAnimatorCall(){
+      let formData = new FormData();
+      Array.from(fileUpload.files).forEach((file, index) => {
+        if( !(index < parseInt(startCropM.value) || index > parseInt(endCropM.value) ) )
+          formData.append('images', file);
+      });
+      formData.append("delay", delayM.value);
+      formData.append("loops", loopsM.value);
+
+      // Send Request
+      var httpRequest = new XMLHttpRequest();
+      httpRequest.open("POST", '/animatorEditor', true);
+      //httpRequest.setRequestHeader("Content-Type", "multipart/form-data");
+      httpRequest.onreadystatechange = function(){ 
+          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+              let jsonResponse = JSON.parse(this.responseText);
+              let link = document.createElement("a");
+              document.body.appendChild(link);
+              link.setAttribute("type", "hidden");
+              link.href = "data:text/plain;base64," + jsonResponse['videoFile'];
+              link.download = "audioFile" + jsonResponse['extension'];
+              link.click();
+              document.body.removeChild(link);
+              console.log("Terminated. Please, read from Server console to check the data sent.")
+          }
+      }
+      httpRequest.send(formData);
+    }
+  </script>
+{% endblock %}

@@ -1,255 +1,370 @@
-<!DOCTYPE html>
-<html class="h-100 w-100">
+{% extends "base.html" %}
 
-  <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>SAM | Image Editor</title>
-      <!-- Bootstrap core CSS -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-      <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
-      <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-  </head>
+{% block complementaryTitle %}| Image Editor{% endblock %}
 
-  <body class="row w-100 h-100 m-0 interactive-bg">
-    <div class="d-flex align-items-center justify-content-center text-white interactive-bg p-0 m-0" style="height: 10vh;">
-      <h2>
-          <i class="bi bi-disc"></i>
-          AudioCanary | Image Editor
-      </h2>
+{% block head %}  {% endblock %}
+
+{% block pagetype %}Image Editor{% endblock %}
+{% block pagetitles %}Image Editor{% endblock %}
+
+{% block uploadTitle %}Upload Image{% endblock %}
+
+{% block uploadMessage %}After the upload we will display a real-time preview {% endblock %}
+
+{% block editingFeatures %}
+
+  <h5 style="margin-top: 10%;">Visual Settings</h5>
+  <div class="mb-3 text-start">
+    <div class="field-button d-flex justify-content-between align-items-center">
+      <label>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-brightness-high me-2" viewBox="0 0 16 16">
+          <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+        </svg>
+        Brightness
+      </label>
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+      </svg>
     </div>
+    <div class="collapse">
+      <div class="settings-box">
+        <div class="input-field-area">
+          <label class="me-4">-100</label>
+          <input class="range-editor editor-b" type="range" min="-100" max="100" step="1" value="0" id="brightnessM">
+          <label class="ms-4">100</label>
+          <input placeholder="0" type="text" class="ms-4 under-line" maxlength="3"/>
+        </div>
+        <label class="attached-text mt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+          </svg>
+          This setting will be updated in real-time on the preview.
+        </label>
+      </div>
+    </div>
+  </div>
 
-    <div class="row p-0 m-0 text-center text-white border-top border-info w-100" style="height: 90vh">
-      <div class="col-xl-7">
-        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column align-items-center justify-content-center">
-          <div id="mainBox">
-            <h1>Upload Image.</h1>
-            <p class="lead">Try uploading an image and see how the server responds.</p>
-            <div class="mb-3">
-              <input class="form-control" style="width: 50%; margin: auto;" type="file" id="fileUpload">
-              <div id="loadingView" class="spinner-border visually-hidden" role="status"></div>
-            </div>
-          </div>
+  <div class="mb-3 text-start">
+    <div class="field-button d-flex justify-content-between align-items-center">
+      <label>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-circle-half me-2" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+        </svg>
+        Contrast
+      </label>
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+      </svg>
+    </div>
+    <div class="collapse">
+      <div class="settings-box">
+        <div class="input-field-area">
+          <label class="me-4">-100</label>
+          <input class="range-editor editor-b" type="range" min="-100" max="100" step="1" value="0" id="contrastM">
+          <label class="ms-4">100</label>
+          <input placeholder="0" type="text" class="ms-4 under-line" maxlength="3"/>
+        </div>
+        <label class="attached-text mt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+          </svg>
+          This setting will be updated in real-time on the preview.
+        </label>
+      </div>
+    </div>
+  </div>
 
-          <div id="editBox" class="visually-hidden" style="width: 80%;">
-            <h1>Image Effects</h1>
+  <div class="mb-3 text-start">
+    <div class="field-button d-flex justify-content-between align-items-center">
+      <label>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-droplet-half me-2" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M7.21.8C7.69.295 8 0 8 0c.109.363.234.708.371 1.038.812 1.946 2.073 3.35 3.197 4.6C12.878 7.096 14 8.345 14 10a6 6 0 0 1-12 0C2 6.668 5.58 2.517 7.21.8zm.413 1.021A31.25 31.25 0 0 0 5.794 3.99c-.726.95-1.436 2.008-1.96 3.07C3.304 8.133 3 9.138 3 10c0 0 2.5 1.5 5 .5s5-.5 5-.5c0-1.201-.796-2.157-2.181-3.7l-.03-.032C9.75 5.11 8.5 3.72 7.623 1.82z"/>
+          <path fill-rule="evenodd" d="M4.553 7.776c.82-1.641 1.717-2.753 2.093-3.13l.708.708c-.29.29-1.128 1.311-1.907 2.87l-.894-.448z"/>
+        </svg>
+        Saturation
+      </label>
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+      </svg>
+    </div>
+    <div class="collapse">
+      <div class="settings-box">
+        <div class="input-field-area">
+          <label class="me-4">-100</label>
+          <input class="range-editor editor-b" type="range" min="-100" max="100" step="1" value="0" id="saturationM">
+          <label class="ms-4">100</label>
+          <input placeholder="0" type="text" class="ms-4 under-line" maxlength="3"/>
+        </div>
+        <label class="attached-text mt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+          </svg>
+          This setting will be updated in real-time on the preview.
+        </label>
+      </div>
+    </div>
+  </div>
 
-            <div class="mb-3 text-start">
-              <label for="saturationM" class="attached-text">Brightness</label>
-              <div class="input-field-area">
-                <label for="saturationM" class="me-4">-100</label>
-                <input class="range-editor editor-b" type="range" min="-100" max="100" step="1" value="0" id="brightnessM">
-                <label for="saturationM" class="ms-4">100</label>
-                <input placeholder="0" type="text" class="ms-4 under-line" maxlength="3"/>
-              </div>
-            </div> 
-            <div class="mb-3 text-start">
-              <label for="saturationM" class="attached-text">Contrast</label>
-              <div class="input-field-area">
-                <label for="saturationM" class="me-4">-100</label>
-                <input class="range-editor editor-b" type="range" min="-100" max="100" step="1" value="0" id="contrastM">
-                <label for="saturationM" class="ms-4">100</label>
-                <input placeholder="0" type="text" class="ms-4 under-line" maxlength="3"/>
-              </div>
-            </div> 
-            <div class="mb-3 text-start">
-              <label for="saturationM" class="attached-text">Saturation</label>
-              <div class="input-field-area">
-                <label for="saturationM" class="me-4">-100</label>
-                <input class="range-editor editor-b" type="range" min="-100" max="100" step="1" value="0" id="saturationM">
-                <label for="saturationM" class="ms-4">100</label>
-                <input placeholder="0" type="text" class="ms-4 under-line" maxlength="3"/>
-              </div>
-            </div> 
-            <div class="mb-3 text-start">
-              <label for="saturationM" class="attached-text">Sharpness</label>
-              <div class="input-field-area">
-                <label for="saturationM" class="me-4">0</label>
-                <input class="range-editor editor-b" type="range" min="0" max="15" step="1" value="0" id="sharpnessM">
-                <label for="saturationM" class="ms-4">15</label>
-                <input placeholder="0" type="text" class="ms-4 under-line" maxlength="2"/>
-              </div>
-            </div>
+  <div class="mb-3 text-start">
+    <div class="field-button d-flex justify-content-between align-items-center">
+      <label>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-triangle-half me-2" viewBox="0 0 16 16">
+          <path d="M8.065 2.016A.13.13 0 0 0 8.002 2v11.983l6.856.017a.12.12 0 0 0 .066-.017.162.162 0 0 0 .054-.06.176.176 0 0 0-.002-.183L8.12 2.073a.146.146 0 0 0-.054-.057zm-1.043-.45a1.13 1.13 0 0 1 1.96 0l6.856 11.667c.458.778-.091 1.767-.98 1.767H1.146c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>
+        </svg>
+        Sharpness
+      </label>
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+      </svg>
+    </div>
+    <div class="collapse">
+      <div class="settings-box">
+        <div class="input-field-area">
+          <label class="me-4">0</label>
+          <input class="range-editor editor-b" type="range" min="0" max="15" step="1" value="0" id="sharpnessM">
+          <label class="ms-4">15</label>
+          <input placeholder="0" type="text" class="ms-4 under-line" maxlength="2"/>
+        </div>
+        <label class="attached-text mt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+          </svg>
+          This setting will be updated in real-time on the preview.
+        </label>
+      </div>
+    </div>
+  </div>
             
-            <div class="mb-3 text-start" style="width: 50%;">
-              <label for="saturationM" class="attached-text">Custom Filters</label>
-              <div class="input-field-area d-flex justify-content-between">
-                <label for="saturationM" class="me-4 fs-5">Grayscale</label>
-                <label class="switch">
-                  <input type="checkbox" class="check-filter">
-                  <span class="slider round"></span>
-                </label>
-              </div>
-            </div> 
-
-            <div class="mb-3 text-start" style="width: 50%;">
-              <div class="input-field-area d-flex justify-content-between">
-                <label for="saturationM" class="me-1 fs-5">Threshold</label>
-                <input value="75" type="text" class="me-3 ms-2 another-line disabled-l threshold-var" maxlength="3"/>
-                <label class="switch">
-                  <input type="checkbox" class="check-filter">
-                  <span class="slider round"></span>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="d-flex flex-column justify-content-center align-items-center col-xl-5" id="containingBox" style="background-color: #06091f; padding: 50px !important;">
-        <img id="imageDisplay" src="#" alt="Preview Image" class="visually-hidden m-auto" style="height: 60vh;"/>
-        <h2>Image Preview</h2>
-        <div class="mt-4 mb-4" style="width: 400px; height: 400px; background-color: black; display: flex;">
-          <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"/>
-        </div>
-        <a href="#">
-          <button type="button" class="btn btn-outline-info" id="storeImageCall">
-            <span class="loading-save spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
-            Save Image
-          </button>
-        </a>
-        <canvas width="500" height="500" id="realCanvas" class="visually-hidden"/>
-        <a id="downloadLink" class="visually-hidden"></a>
-      </div>
+  <div class="mb-3 text-start" style="width: 50%;">
+    <label for="saturationM" class="attached-text">Custom Filters</label>
+    <div class="input-field-area d-flex justify-content-between">
+      <label for="saturationM" class="me-4 fs-5">Grayscale</label>
+      <label class="switch">
+        <input type="checkbox" class="check-filter">
+        <span class="slider round"></span>
+      </label>
     </div>
-  </body>
-  
-    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
-  
-    <script>
-      const fileUpload = document.getElementById("fileUpload");
-      const loader = document.getElementById("loadingView");
-      const imageDisplay = document.getElementById("imageDisplay");
-      const canvasObject = document.getElementById("canvas");
-      const canvasContext = canvasObject.getContext('2d');
+  </div> 
 
-      const UID1 = document.getElementById("mainBox");
-      const UID2 = document.getElementById("editBox");
-      fileUpload.addEventListener("change", displayImage, false);
+  <div class="mb-3 text-start" style="width: 50%;">
+    <div class="input-field-area d-flex justify-content-between">
+      <label for="saturationM" class="me-1 fs-5">Threshold</label>
+      <input value="75" type="text" class="me-3 ms-2 another-line disabled-l threshold-var" maxlength="3"/>
+      <label class="switch">
+        <input type="checkbox" class="check-filter">
+        <span class="slider round"></span>
+      </label>
+    </div>
+  </div>
+{% endblock %}
 
-      let imageWidth = 0;
-      let imageHeight = 0;
+{% block previewTitle %}Image Preview{% endblock %}
 
-      function displayImage(){
-        let imageFile = this.files[0];
-        displayElement(fileUpload, false)
-        displayElement(loader, true)
-        console.log("The file name is: " + imageFile.name)
-        console.log("The file size is: " + imageFile.size + " bytes.")
-        
-        let imageObject = new Image;
-        imageObject.onload = function(){
-            determineCanvasDimension(imageObject.width, imageObject.height)
-            canvasContext.drawImage(imageObject, 0, 0, canvasObject.width, canvasObject.height);
-            displayElement(loader, false);
-            displayElement(canvasObject, true);
-            displayElement(UID1, false);
-            displayElement(UID2, true);
-        }
-        imageObject.src = URL.createObjectURL(imageFile);
-      }
+{% block previewElements %}
+  <div class="mt-4 mb-4" style="width: 400px; height: 400px; background-color: black; display: flex;">
+    <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"></canvas>
+  </div>
+  <canvas width="500" height="500" id="realCanvas" class="visually-hidden"></canvas>
+{% endblock %}
 
-      function determineCanvasDimension(width, height){
-        let maxWidth = 400;
-        let maxHeight = 400;
-        let ratio = width / (height * 1.0);
+{% block previewButtons %}
+  <a href="#">
+    <button type="button" class="btn btn-outline-info" id="storeImageCall">
+      <span class="loading-save spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
+      Save Image
+    </button>
+  </a>
+{% endblock %}
 
-        if(width > height){
-          if(width > maxWidth){
-            canvasObject.width = maxWidth;
-            canvasObject.height = maxWidth / ratio;
-          }
-          else{
-            canvasObject.width = width;
-            canvasObject.height = canvasObject.width / ratio;
-          }
-        }
-        else{
-          if(height > maxHeight){
-            canvasObject.height = maxHeight;
-            canvasObject.width = maxHeight * ratio;
-          }
-          else{
-            canvasObject.height = height;
-            canvasObject.width = canvasObject.height * ratio;
-          }
-        }
+{% block scripts %}
+<script>
+  const fileUpload = document.getElementById("fileUpload");
+  const loader = document.getElementById("loadingView");
+  const imageDisplay = document.getElementById("imageDisplay");
+  const canvasObject = document.getElementById("canvas");
+  const canvasContext = canvasObject.getContext('2d');
 
-        // Assign for global use
-        imageWidth = width;
-        imageHeight = height;
-      }
+  const UID1 = document.getElementById("mainBox");
+  const UID2 = document.getElementById("editBox");
+  fileUpload.addEventListener("change", displayImage, false);
 
-      function displayElement(element, showOnScreen){
-        if(showOnScreen)
-          element.classList.remove("visually-hidden");
-        else
-          element.classList.add("visually-hidden");
-      }
+  let imageWidth = 0;
+  let imageHeight = 0;
 
-      function enableElement(element, enable){
-        if(enable)
-          element.classList.remove("disabled-l");
-        else
-          element.classList.add("disabled-l");
-      }
-    </script>
+  function displayImage(){
+    let imageFile = this.files[0];
+    displayElement(fileUpload, false)
+    displayElement(loader, true)
+    console.log("The file name is: " + imageFile.name)
+    console.log("The file size is: " + imageFile.size + " bytes.")
     
-    <script type="text/javascript" src="{{ url_for('static', filename='caman.full.min.js') }}"></script>
+    let imageObject = new Image;
+    imageObject.onload = function(){
+        determineCanvasDimension(imageObject.width, imageObject.height)
+        canvasContext.drawImage(imageObject, 0, 0, canvasObject.width, canvasObject.height);
+        displayElement(loader, false);
+        displayElement(canvasObject, true);
+        displayElement(UID1, false);
+        displayElement(UID2, true);
+        adjustApplication();
+    }
+    imageObject.src = URL.createObjectURL(imageFile);
+  }
 
-    <script>
-      // Editor
-      const editorBs = document.getElementsByClassName("editor-b");
-      const inputs = document.getElementsByClassName("under-line");
-      const filters = document.getElementsByClassName("check-filter");
-      const thresholdInput = document.getElementsByClassName("threshold-var")[0];
-      for(let i = 0; i < editorBs.length; i++){
-        editorBs[i].addEventListener("change", executeChanges);
-        editorBs[i].addEventListener("change", applyChange.bind(this, i));
-        inputs[i].addEventListener("input", alternativeInput.bind(this, i));
+  function determineCanvasDimension(width, height){
+    let maxWidth = 400;
+    let maxHeight = 400;
+    let ratio = width / (height * 1.0);
+
+    if(width > height){
+      if(width > maxWidth){
+        canvasObject.width = maxWidth;
+        canvasObject.height = maxWidth / ratio;
       }
-      for(let i = 0; i < filters.length; i++)
-        filters[i].addEventListener("change", filterTriggered.bind(this, i));
-      thresholdInput.addEventListener("input", executeChanges);
-      document.getElementById("storeImageCall").addEventListener("click", storeImage);
-      // ////////////////////////////////////////////////////////////////
+      else{
+        canvasObject.width = width;
+        canvasObject.height = canvasObject.width / ratio;
+      }
+    }
+    else{
+      if(height > maxHeight){
+        canvasObject.height = maxHeight;
+        canvasObject.width = maxHeight * ratio;
+      }
+      else{
+        canvasObject.height = height;
+        canvasObject.width = canvasObject.height * ratio;
+      }
+    }
 
-      // Sliders
-      const brightnessO = document.getElementById("brightnessM");
-      const contrastO = document.getElementById("contrastM");
-      const saturationO = document.getElementById("saturationM");
-      const sharpnessO = document.getElementById("sharpnessM");
-      let filterSet = null;
-      // ////////////////////////////////////////////////////////////////
+    // Assign for global use
+    imageWidth = width;
+    imageHeight = height;
+  }
+</script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='caman.full.min.js') }}"></script>
+
+<script>
+  // Editor
+  const editorBs = document.getElementsByClassName("editor-b");
+  const inputs = document.getElementsByClassName("under-line");
+  const filters = document.getElementsByClassName("check-filter");
+  const thresholdInput = document.getElementsByClassName("threshold-var")[0];
+  for(let i = 0; i < editorBs.length; i++){
+    editorBs[i].addEventListener("change", executeChanges);
+    editorBs[i].addEventListener("change", applyChange.bind(this, i));
+    inputs[i].addEventListener("input", alternativeInput.bind(this, i));
+  }
+  for(let i = 0; i < filters.length; i++)
+    filters[i].addEventListener("change", filterTriggered.bind(this, i));
+  thresholdInput.addEventListener("input", executeChanges);
+  document.getElementById("storeImageCall").addEventListener("click", storeImage);
+  // ////////////////////////////////////////////////////////////////
+
+  // Sliders
+  const brightnessO = document.getElementById("brightnessM");
+  const contrastO = document.getElementById("contrastM");
+  const saturationO = document.getElementById("saturationM");
+  const sharpnessO = document.getElementById("sharpnessM");
+  let filterSet = null;
+  // ////////////////////////////////////////////////////////////////
 
 
-      // Give in the Filters to Caman
-      Caman.Filter.register("threshold", function (limit){
-          this.process("threshold", function (rgba) {
-              var lumin = (0.2126 * rgba.r) + (0.7152 * rgba.g) + (0.0722 * rgba.b);
-              rgba.r = lumin > limit ? 255 : 0;
-              rgba.g = lumin > limit ? 255 : 0;
-              rgba.b = lumin > limit ? 255 : 0;
-          });
-          return this;
+  // Give in the Filters to Caman
+  Caman.Filter.register("threshold", function (limit){
+      this.process("threshold", function (rgba) {
+          var lumin = (0.2126 * rgba.r) + (0.7152 * rgba.g) + (0.0722 * rgba.b);
+          rgba.r = lumin > limit ? 255 : 0;
+          rgba.g = lumin > limit ? 255 : 0;
+          rgba.b = lumin > limit ? 255 : 0;
       });
+      return this;
+  });
 
-      Caman.Filter.register("grayscale", function () {
-          this.process("grayscale", function (rgba) {
-              var lumin = (0.2126 * rgba.r) + (0.7152 * rgba.g) + (0.0722 * rgba.b);
-              rgba.r = lumin;
-              rgba.g = lumin;
-              rgba.b = lumin;
-          });
-          return this;
+  Caman.Filter.register("grayscale", function () {
+      this.process("grayscale", function (rgba) {
+          var lumin = (0.2126 * rgba.r) + (0.7152 * rgba.g) + (0.0722 * rgba.b);
+          rgba.r = lumin;
+          rgba.g = lumin;
+          rgba.b = lumin;
       });
-      // /////////////////////////////////////////////////////////////////////////////
+      return this;
+  });
+  // /////////////////////////////////////////////////////////////////////////////
+  
+
+  function executeChanges(){
+    Caman("#canvas", function(){
+      this.revert(false);
+
+      if( filterSet == null ){
+        if( parseInt(brightnessO.value) !== 0)
+          this.brightness( parseInt(brightnessO.value) );
+        if( parseInt(contrastO.value) !== 0 )
+          this.contrast( parseInt(contrastO.value) );
+        if( parseInt(saturationO.value) !== 0 )
+          this.saturation( parseInt(saturationO.value) );
+        if( parseInt(sharpnessO.value) !== 0 )
+          this.sharpen( parseInt(sharpnessO.value) );
+      }
+      else{
+        if( filterSet == 0 )
+          this.grayscale();
+        if( filterSet == 1 )
+          this.threshold(thresholdInput.value);
+      }
       
+      this.render();
+    });
+  }
 
-      function executeChanges(){
-        Caman("#canvas", function(){
-          this.revert(false);
+  function applyChange(elementNum){
+    inputs[elementNum].value = editorBs[elementNum].value;
+  }
 
+  function alternativeInput(elementNum){
+    editorBs[elementNum].value = inputs[elementNum].value;
+    executeChanges();
+  }
+
+  function filterTriggered(elementNum){
+    filterSet = filters[elementNum].checked ? elementNum : null;
+    for(let i = 0; i < editorBs.length; i++){
+      enableElement(editorBs[i], !filters[elementNum].checked);
+      enableElement(inputs[i], !filters[elementNum].checked)
+    }
+    for(let i = 0; i < filters.length; i++){
+      if(i !== elementNum){
+        enableElement(filters[i], !filters[elementNum].checked)
+        filters[i].checked = false;
+      }
+      
+    }
+    if(elementNum === 1)
+        enableElement(thresholdInput, filters[elementNum].checked)
+    executeChanges();
+  }
+
+  function storeImage(){
+    displayElement(document.getElementsByClassName("loading-save")[0], true);
+    document.getElementById("storeImageCall").classList.add("disabled");
+
+    // Use the Real Canvas to work on the image
+    let realCanvas = document.getElementById("realCanvas");
+    let realContext = realCanvas.getContext('2d');
+    let imageFile = fileUpload.files[0];
+    let imageObject = new Image;
+    imageObject.onload = function(){
+        realCanvas.width = imageObject.width;
+        realCanvas.height = imageObject.height;
+        realContext.drawImage(imageObject, 0, 0, realCanvas.width, realCanvas.height);
+        
+        Caman("#realCanvas", function(){
           if( filterSet == null ){
             if( parseInt(brightnessO.value) !== 0)
               this.brightness( parseInt(brightnessO.value) );
@@ -267,83 +382,20 @@
               this.threshold(thresholdInput.value);
           }
           
-          this.render();
+          this.render( function(){
+            let link = document.getElementById('downloadLink');
+            link.setAttribute('download', 'EditedImage.png');
+            link.setAttribute('href', realCanvas.toDataURL("image/png", 0.5).replace("image/png", "image/octet-stream"));
+
+            displayElement(document.getElementsByClassName("loading-save")[0], false);
+            document.getElementById("storeImageCall").classList.remove("disabled");
+            link.click();
+          } );
         });
-      }
+    }
+    imageObject.src = URL.createObjectURL(imageFile);
 
-      function applyChange(elementNum){
-        inputs[elementNum].value = editorBs[elementNum].value;
-      }
-
-      function alternativeInput(elementNum){
-        editorBs[elementNum].value = inputs[elementNum].value;
-        executeChanges();
-      }
-
-      function filterTriggered(elementNum){
-        filterSet = filters[elementNum].checked ? elementNum : null;
-        for(let i = 0; i < editorBs.length; i++){
-          enableElement(editorBs[i], !filters[elementNum].checked);
-          enableElement(inputs[i], !filters[elementNum].checked)
-        }
-        for(let i = 0; i < filters.length; i++){
-          if(i !== elementNum){
-            enableElement(filters[i], !filters[elementNum].checked)
-            filters[i].checked = false;
-          }
-          
-        }
-        if(elementNum === 1)
-            enableElement(thresholdInput, filters[elementNum].checked)
-        executeChanges();
-      }
-
-      function storeImage(){
-        displayElement(document.getElementsByClassName("loading-save")[0], true);
-        document.getElementById("storeImageCall").classList.add("disabled");
-
-        // Use the Real Canvas to work on the image
-        let realCanvas = document.getElementById("realCanvas");
-        let realContext = realCanvas.getContext('2d');
-        let imageFile = fileUpload.files[0];
-        let imageObject = new Image;
-        imageObject.onload = function(){
-            realCanvas.width = imageObject.width;
-            realCanvas.height = imageObject.height;
-            realContext.drawImage(imageObject, 0, 0, realCanvas.width, realCanvas.height);
-            
-            Caman("#realCanvas", function(){
-              if( filterSet == null ){
-                if( parseInt(brightnessO.value) !== 0)
-                  this.brightness( parseInt(brightnessO.value) );
-                if( parseInt(contrastO.value) !== 0 )
-                  this.contrast( parseInt(contrastO.value) );
-                if( parseInt(saturationO.value) !== 0 )
-                  this.saturation( parseInt(saturationO.value) );
-                if( parseInt(sharpnessO.value) !== 0 )
-                  this.sharpen( parseInt(sharpnessO.value) );
-              }
-              else{
-                if( filterSet == 0 )
-                  this.grayscale();
-                if( filterSet == 1 )
-                  this.threshold(thresholdInput.value);
-              }
-              
-              this.render( function(){
-                let link = document.getElementById('downloadLink');
-                link.setAttribute('download', 'EditedImage.png');
-                link.setAttribute('href', realCanvas.toDataURL("image/png", 0.5).replace("image/png", "image/octet-stream"));
-
-                displayElement(document.getElementsByClassName("loading-save")[0], false);
-                document.getElementById("storeImageCall").classList.remove("disabled");
-                link.click();
-              } );
-            });
-        }
-        imageObject.src = URL.createObjectURL(imageFile);
-
-        // ////////////////////////////////////////
-      }
-    </script>
-</html>
+    // ////////////////////////////////////////
+  }
+</script>
+{% endblock %}
