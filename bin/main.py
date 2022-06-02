@@ -174,10 +174,8 @@ def animator():
 
 @main.route('/animatorEditor', methods=['POST'])
 def animationUploadPage():
-    uploaded_files = request.files.getlist("images")
-    print(uploaded_files)
-    for file in uploaded_files:
-            file.save( generateFileName(15) + ".jpg" )
+    imageList = request.files.getlist("images")
+    print(imageList)
     return "OK"
 
 # Utilities !!
