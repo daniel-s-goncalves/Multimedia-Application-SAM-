@@ -172,8 +172,12 @@ def gifEditor():
 def animator():
     return render_template('animator.html')
 
-@main.route('/animator', methods=['POST'])
+@main.route('/animatorEditor', methods=['POST'])
 def animationUploadPage():
+    uploaded_files = request.files.getlist("images")
+    print(uploaded_files)
+    for file in uploaded_files:
+            file.save( generateFileName(15) + ".jpg" )
     return "OK"
 
 # Utilities !!

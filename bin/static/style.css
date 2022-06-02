@@ -559,11 +559,11 @@ input[type=checkbox].disabled-l{
 }
 
 .list-inline{
-    width: 135px;
+    width: 130px;
     height: 140px;
     border: 1px solid #000;
     display: inline-block;
-    margin-bottom: 5px;
+    margin: 2.5px;
     background-color: #2d2d2d;
     border-radius: 0.8rem;
 }
@@ -582,3 +582,25 @@ input[type=checkbox].disabled-l{
     font-size: 11px;
     height: 20px;
 }
+
+.animator-container{
+  width: 755px; 
+  max-height: 450px; 
+  overflow-y: scroll;
+}
+
+.animator-container::-webkit-scrollbar {
+  width: 7.5px;
+}
+
+.animator-container::-webkit-scrollbar-track {
+  background-color: #0dcaf0;
+  border-radius: 0px;
+}
+
+.animator-container::-webkit-scrollbar-thumb {
+  border-radius: 0px;
+  background-clip: content-box;
+  background-color: #353535;
+}
+
