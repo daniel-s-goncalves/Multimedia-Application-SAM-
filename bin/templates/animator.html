@@ -243,6 +243,7 @@
       });
       formData.append("delay", delayM.value);
       formData.append("loops", loopsM.value);
+      formData.append("durations", getFrameDurations());
 
       // Send Request
       var httpRequest = new XMLHttpRequest();
@@ -254,14 +255,23 @@
               let link = document.createElement("a");
               document.body.appendChild(link);
               link.setAttribute("type", "hidden");
-              link.href = "data:text/plain;base64," + jsonResponse['videoFile'];
-              link.download = "audioFile" + jsonResponse['extension'];
+              link.href = "data:text/plain;base64," + jsonResponse['imageFile'];
+              link.download = "animatedImage" + jsonResponse['extension'];
               link.click();
               document.body.removeChild(link);
               console.log("Terminated. Please, read from Server console to check the data sent.")
           }
       }
       httpRequest.send(formData);
+    }
+
+    function getFrameDurations(){
+      let frameDurations = [];
+      for(let i = 0; i < frameDelayUniq.length; i++){
+        if( !(i < parseInt(startCropM.value) || i > parseInt(endCropM.value) ) )
+          frameDurations.push( parseFloat(frameDelayUniq[i].value) );
+      }
+      return frameDurations;
     }
   </script>
 {% endblock %}

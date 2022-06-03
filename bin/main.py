@@ -9,6 +9,7 @@ import zipfile
 import base64
 import random
 import string
+import math
 import os
 from moviepy.editor import *
 import moviepy.video.fx.all as vfx
@@ -175,8 +176,26 @@ def animator():
 @main.route('/animatorEditor', methods=['POST'])
 def animationUploadPage():
     imageList = request.files.getlist("images")
+    loops = int( request.form.get("loops") )
+    durations = request.form.get("durations")
     print(imageList)
-    return "OK"
+    
+    ########### Acquire Durations #############
+    durations = request.form.get("durations").split(",")
+    durations = [math.ceil( float(duration) / 10 + 20 ) for duration in durations]
+    print(durations)
+    print( len(durations) )
+    ###########################################
+
+    imageObjects = []
+    for image in imageList:
+        imageObjects.append( Image.open(image.stream) )
+    
+    buffered = BytesIO()
+    imageObjects[0].save(buffered, save_all=True, append_images=imageObjects[1:], optimize=False, duration=durations, loop=loops, format="GIF")
+    encodedGIF = base64.b64encode(buffered.getvalue())
+    print("Process Complete!")
+    return { "imageFile": encodedGIF.decode(), "extension": ".gif" }
 
 # Utilities !!
 def clearStorage(arrayFiles):
