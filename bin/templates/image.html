@@ -11,6 +11,10 @@
 
 {% block uploadMessage %}After the upload we will display a real-time preview {% endblock %}
 
+{% block inputBox %}
+  <input class="form-control" style="width: 15rem; margin: auto;" type="file" id="fileUpload" accept=".jpg, .jpeg, .png, .gif">
+{% endblock %}
+
 {% block editingFeatures %}
 
   <h5 style="margin-top: 10%;">Visual Settings</h5>
@@ -165,10 +169,12 @@
 {% block previewTitle %}Image Preview{% endblock %}
 
 {% block previewElements %}
-  <div class="mt-4 mb-4" style="width: 400px; height: 400px; background-color: black; display: flex;">
-    <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"></canvas>
+  <div class="mt-4 mb-4 preview-box">
+    <div id="cropZone" class="boundary-crop">
+      <div id="draggableBox" class="preview-topic draggable-resizable"></div>
+    </div>
+    <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"/>
   </div>
-  <canvas width="500" height="500" id="realCanvas" class="visually-hidden"></canvas>
 {% endblock %}
 
 {% block previewButtons %}

@@ -7,9 +7,13 @@
 {% block pagetype %}Video Editor{% endblock %}
 {% block pagetitles %}Video Editor{% endblock %}
 
-{% block uploadTitle %}Upload Video{% endblock %}
+{% block uploadTitle %}Upload Media{% endblock %}
 
 {% block uploadMessage %}After the upload we will load a preview for you{% endblock %}
+
+{% block inputBox %}
+  <input class="form-control" style="width: 15rem; margin: auto;" type="file" id="fileUpload" accept=".mp4, .mp3, .mov">
+{% endblock %}
 
 {% block editingFeatures %}
   <h5 style="margin-top: 10%;">Video Settings</h5>
@@ -251,7 +255,7 @@
 
 {% block previewButtons %}
   <a href="#">
-    <button type="button" class="btn btn-outline-info" id="sendAudioCall">
+    <button type="button" class="btn btn-outline-info" id="sendVideoCall">
       <span class="loading-save spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
       Modify video!
     </button>
@@ -354,6 +358,9 @@
     document.getElementById("sendAudioCall").addEventListener("click", sendAudioServer);
 
     function sendAudioServer(){
+      displayElement(document.getElementsByClassName("loading-save")[0], true);
+      document.getElementById("sendVideoCall").classList.add("disabled");
+
       let fileD = fileUpload.files[0];
       let formData = new FormData();
       formData.append("file", fileD);
@@ -382,6 +389,9 @@
               link.href = "data:text/plain;base64," + jsonResponse['videoFile'];
               link.download = "audioFile" + jsonResponse['extension'];
               link.click();
+
+              displayElement(document.getElementsByClassName("loading-save")[0], false);
+              document.getElementById("sendVideoCall").classList.remove("disabled");
               document.body.removeChild(link);
               console.log("Terminated. Please, read from Server console to check the data sent.")
           }

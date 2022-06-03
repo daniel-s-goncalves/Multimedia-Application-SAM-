@@ -1,334 +1,321 @@
-<!DOCTYPE html>
-<html class="h-100">
+{% extends "base.html" %}
 
-  <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>SAM | Image Cropper</title>
-      <!-- Bootstrap core CSS -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-      <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
-      <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-  </head>
+{% block complementaryTitle %}| Image Cropper{% endblock %}
 
-  <body class="h-100 interactive-bg">
-    <div class="d-flex align-items-center justify-content-center text-white interactive-bg" style="height: 10vh;">
-      <div>
-        <a href="{{url_for('main.initialPage')}}">
-        <button type="button" class="btn btn-outline-info" style="position: absolute; top: 5vh; left: 2.5rem; transform: translate(0, -50%);">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
-          </svg>
-          Return to main page
-        </button>
-        </a>
+{% block head %}  {% endblock %}
+
+{% block pagetype %}Image Cropper{% endblock %}
+{% block pagetitles %}Image Cropper{% endblock %}
+
+{% block uploadTitle %}Upload Image{% endblock %}
+
+{% block uploadMessage %}After the upload we will display an editable region {% endblock %}
+
+{% block inputBox %}
+  <input class="form-control" style="width: 15rem; margin: auto;" type="file" id="fileUpload" accept=".jpg, .jpeg, .png, .gif">
+{% endblock %}
+
+{% block editingFeatures %}
+<div class="mb-3 text-start">
+  <div class="field-button d-flex justify-content-between align-items-center">
+    <label>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-brightness-high me-2" viewBox="0 0 16 16">
+        <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+      </svg>
+      Cropping Dimensions
+    </label>
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+    </svg>
+  </div>
+  <div class="collapse">
+    <div class="settings-box">
+      <div class="input-field-area">
+        <label class="me-2">Width</label>
+        <input placeholder="1000" type="text" class="ms-2 me-4 under-line measure-v disabled-l" maxlength="4"/>
+        <label class="ms-4 me-2">Height</label>
+        <input placeholder="1000" type="text" class="ms-2 under-line measure-v disabled-l" maxlength="4"/>
       </div>
-      <h2>
-          <i class="bi bi-disc"></i>
-          AudioCanary | Image Cropper
-      </h2>
+      <div class="input-field-area">
+        <label class="me-2">Position X</label>
+        <input placeholder="1000" type="text" class="ms-2 me-4 under-line measure-v disabled-l" maxlength="4"/>
+        <label class="ms-4 me-2">Position Y</label>
+        <input placeholder="1000" type="text" class="ms-2 under-line measure-v disabled-l" maxlength="4"/>
+      </div>
+      <label class="attached-text mt-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+          <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+        </svg>
+        These settings can only be edited by moving the box on the right.
+      </label>
     </div>
+  </div>
+</div>
+{% endblock %}
 
-    <div class="row m-0 text-center text-white border-top border-info" style="height: 90vh; width: 100vw;">
-      <div class="col-xl-7">
-        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column align-items-center justify-content-center">
-          <div id="mainBox">
-            <h1>Upload Image.</h1>
-            <p class="lead">Upload your image. The preview will be shown on the right.</p>
-            <div class="mb-3">
-              <input class="form-control" style="width: 50%; margin: auto;" type="file" id="fileUpload">
-              <div id="loadingView" class="spinner-border visually-hidden" role="status"></div>
-            </div>
-          </div>
+{% block previewTitle %}Cropper Box{% endblock %}
 
-          <div id="editBox" class="visually-hidden" style="width: 80%;">
-            <h1>Cropping</h1>
-            <p class="lead">Drag the box on the right to adjust the dimensions.</p>
-            <div class="mb-3 text-start">
-              <label for="saturationM" class="attached-text">Dimensions</label>
-              <div class="input-field-area">
-                <label for="saturationM" class="me-2">Width</label>
-                <input placeholder="1000" type="text" class="ms-2 me-4 under-line measure-v disabled-l" maxlength="4"/>
-                <label for="saturationM" class="ms-4 me-2">Height</label>
-                <input placeholder="1000" type="text" class="ms-2 under-line measure-v disabled-l" maxlength="4"/>
-              </div>
-            </div>
-            
-            <div class="mb-3 text-start">
-              <label for="saturationM" class="attached-text">Top left corner</label>
-              <div class="input-field-area">
-                <label for="saturationM" class="me-2">Position X</label>
-                <input placeholder="1000" type="text" class="ms-2 me-4 under-line measure-v disabled-l" maxlength="4"/>
-                <label for="saturationM" class="ms-4 me-2">Position Y</label>
-                <input placeholder="1000" type="text" class="ms-2 under-line measure-v disabled-l" maxlength="4"/>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-      <div class="d-flex flex-column justify-content-center align-items-center col-xl-5" id="containingBox" style="background-color: #06091f; padding: 50px !important;">
-        <img id="imageDisplay" src="#" alt="Preview Image" class="visually-hidden m-auto" style="height: 60vh;"/>
-        <h2>Image Preview</h2>
-        <div class="mt-4 mb-4 preview-box">
-          <div id="cropZone" class="boundary-crop">
-            <div id="draggableBox" class="preview-topic draggable-resizable"></div>
-          </div>
-          <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"/>
-        </div>
-        <a href="#">
-          <button type="button" class="btn btn-outline-info" id="storeImageCall">
-            <span class="loading-save spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
-            Save Image
-          </button>
-        </a>
-        <canvas width="500" height="500" id="realCanvas" class="visually-hidden"/>
-        <a id="downloadLink" class="visually-hidden"></a>
-      </div>
+{% block previewElements %}
+  <div class="mt-4 mb-4 preview-box">
+    <div id="cropZone" class="boundary-crop">
+      <div id="draggableBox" class="preview-topic draggable-resizable"></div>
     </div>
-  </body>
-  
-    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
-  
-    <script>
-      const fileUpload = document.getElementById("fileUpload");
-      const loader = document.getElementById("loadingView");
-      const imageDisplay = document.getElementById("imageDisplay");
-      const canvasObject = document.getElementById("canvas");
-      const canvasContext = canvasObject.getContext('2d');
-      const cropAreaDef = document.getElementById("cropZone");
+    <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"/>
+  </div>
+{% endblock %}
 
-      const UID1 = document.getElementById("mainBox");
-      const UID2 = document.getElementById("editBox");
-      fileUpload.addEventListener("change", displayImage, false);
+{% block previewButtons %}
+  <a href="#">
+    <button type="button" class="btn btn-outline-info" id="storeImageCall">
+      <span class="loading-save spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
+      Save Image
+    </button>
+  </a>
+  <canvas width="500" height="500" id="realCanvas" class="visually-hidden"/>
+{% endblock %}
 
-      let widthRatio = 0.0;
-      let heightRatio = 0.0;
+{% block scripts %}
+<script>
+  const fileUpload = document.getElementById("fileUpload");
+  const loader = document.getElementById("loadingView");
+  const imageDisplay = document.getElementById("imageDisplay");
+  const canvasObject = document.getElementById("canvas");
+  const canvasContext = canvasObject.getContext('2d');
+  const cropAreaDef = document.getElementById("cropZone");
 
-      let imageWidth = 0;
-      let imageHeight = 0;
-      let ratio = 0;
+  const UID1 = document.getElementById("mainBox");
+  const UID2 = document.getElementById("editBox");
+  fileUpload.addEventListener("change", displayImage, false);
 
-      function displayImage(){
-        let imageFile = this.files[0];
-        displayElement(fileUpload, false)
-        displayElement(loader, true)
-        console.log("The file name is: " + imageFile.name)
-        console.log("The file size is: " + imageFile.size + " bytes.")
-        
-        let imageObject = new Image;
-        imageObject.onload = function(){
-            determineCanvasDimension(imageObject.width, imageObject.height)
-            canvasContext.drawImage(imageObject, 0, 0, canvasObject.width, canvasObject.height);
-            displayElement(loader, false);
-            displayElement(canvasObject, true);
-            displayElement(UID1, false);
-            displayElement(UID2, true);
-            setFoundations();
-        }
-        imageObject.src = URL.createObjectURL(imageFile);
-      }
+  let widthRatio = 0.0;
+  let heightRatio = 0.0;
 
-      function determineCanvasDimension(width, height){
-        let maxWidth = 400;
-        let maxHeight = 400;
-        ratio = width / (height * 1.0);
+  let imageWidth = 0;
+  let imageHeight = 0;
+  let ratio = 0;
 
-        if(width > height){
-          if(width > maxWidth){
-            canvasObject.width = maxWidth;
-            canvasObject.height = maxWidth / ratio;
-          }
-          else{
-            canvasObject.width = width;
-            canvasObject.height = canvasObject.width / ratio;
-          }
-        }
-        else{
-          if(height > maxHeight){
-            canvasObject.height = maxHeight;
-            canvasObject.width = maxHeight * ratio;
-          }
-          else{
-            canvasObject.height = height;
-            canvasObject.width = canvasObject.height * ratio;
-          }
-        }
-
-        // Assign for global use
-        imageWidth = width;
-        imageHeight = height;
-        widthRatio = imageWidth / canvasObject.width;
-        heightRatio = imageHeight / canvasObject.height;
-      }
-
-      function displayElement(element, showOnScreen){
-        if(showOnScreen)
-          element.classList.remove("visually-hidden");
-        else
-          element.classList.add("visually-hidden");
-      }
-
-      function enableElement(element, enable){
-        if(enable)
-          element.classList.remove("disabled-l");
-        else
-          element.classList.add("disabled-l");
-      }
-    </script>
+  function displayImage(){
+    let imageFile = this.files[0];
+    displayElement(fileUpload, false)
+    displayElement(loader, true)
+    console.log("The file name is: " + imageFile.name)
+    console.log("The file size is: " + imageFile.size + " bytes.")
     
-    <script type="text/javascript" src="{{ url_for('static', filename='interact.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='caman.full.min.js') }}"></script>
+    let imageObject = new Image;
+    imageObject.onload = function(){
+        determineCanvasDimension(imageObject.width, imageObject.height)
+        canvasContext.drawImage(imageObject, 0, 0, canvasObject.width, canvasObject.height);
+        displayElement(loader, false);
+        displayElement(canvasObject, true);
+        displayElement(UID1, false);
+        displayElement(UID2, true);
+        setFoundations();
+        adjustApplication();
+        collapseList[0].toggle();
+    }
+    imageObject.src = URL.createObjectURL(imageFile);
+  }
 
-    <script>
-      // Input Texts
-      let inputMeasures = document.getElementsByClassName("measure-v");
-      document.getElementById("storeImageCall").addEventListener("click", storeImage);
-      // /////////////////////////////////////////////////////////////////////
+  function determineCanvasDimension(width, height){
+    let maxWidth = 400;
+    let maxHeight = 400;
+    ratio = width / (height * 1.0);
 
-      // Editor
-      function setFoundations(){
-        let clientBox = canvasObject.getBoundingClientRect();
-        let surroundingBox = document.getElementsByClassName("preview-box")[0].getBoundingClientRect();
-        // Set-Limits
-        cropAreaDef.style.left = Math.trunc(clientBox.left - surroundingBox.left) + "px";
-        cropAreaDef.style.top = Math.trunc(clientBox.top - surroundingBox.top) + "px";
-        cropAreaDef.style.width = Math.trunc(clientBox.width) + "px";
-        cropAreaDef.style.height = Math.trunc(clientBox.height) + "px";
+    if(width > height){
+      if(width > maxWidth){
+        canvasObject.width = maxWidth;
+        canvasObject.height = maxWidth / ratio;
+      }
+      else{
+        canvasObject.width = width;
+        canvasObject.height = canvasObject.width / ratio;
+      }
+    }
+    else{
+      if(height > maxHeight){
+        canvasObject.height = maxHeight;
+        canvasObject.width = maxHeight * ratio;
+      }
+      else{
+        canvasObject.height = height;
+        canvasObject.width = canvasObject.height * ratio;
+      }
+    }
 
-        // Put box inside limits
-        let cropBox = document.getElementById("draggableBox");
-        cropBox.style.width = (Math.trunc(clientBox.width) * 0.8) + "px"
-        cropBox.style.height = (Math.trunc(clientBox.height) * 0.8) + "px"
+    // Assign for global use
+    imageWidth = width;
+    imageHeight = height;
+    widthRatio = imageWidth / canvasObject.width;
+    heightRatio = imageHeight / canvasObject.height;
+  }
+
+  function displayElement(element, showOnScreen){
+    if(showOnScreen)
+      element.classList.remove("visually-hidden");
+    else
+      element.classList.add("visually-hidden");
+  }
+
+  function enableElement(element, enable){
+    if(enable)
+      element.classList.remove("disabled-l");
+    else
+      element.classList.add("disabled-l");
+  }
+</script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='interact.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='caman.full.min.js') }}"></script>
+
+<script>
+  // Input Texts
+  let inputMeasures = document.getElementsByClassName("measure-v");
+  document.getElementById("storeImageCall").addEventListener("click", storeImage);
+  // /////////////////////////////////////////////////////////////////////
+
+  // Editor
+  function setFoundations(){
+    let clientBox = canvasObject.getBoundingClientRect();
+    let surroundingBox = document.getElementsByClassName("preview-box")[0].getBoundingClientRect();
+    // Set-Limits
+    cropAreaDef.style.left = Math.trunc(clientBox.left - surroundingBox.left) + "px";
+    cropAreaDef.style.top = Math.trunc(clientBox.top - surroundingBox.top) + "px";
+    cropAreaDef.style.width = Math.trunc(clientBox.width) + "px";
+    cropAreaDef.style.height = Math.trunc(clientBox.height) + "px";
+
+    // Put box inside limits
+    let cropBox = document.getElementById("draggableBox");
+    cropBox.style.width = (Math.trunc(clientBox.width) * 0.8) + "px"
+    cropBox.style.height = (Math.trunc(clientBox.height) * 0.8) + "px"
+    // translate when resizing from top or left edges
+    let x = Math.trunc(clientBox.width) * 0.1;
+    let y = Math.trunc(clientBox.height) * 0.1;
+    cropBox.style.transform = 'translate(' + x + "px," + y + "px)";
+
+    // Assign attribute for draggable events
+    cropBox.setAttribute("data-x", x);
+    cropBox.setAttribute("data-y", y);
+
+    // Fill in correct values on the display:
+    inputMeasures[0].value = parseInt(Math.trunc(clientBox.width) * 0.8 * widthRatio);
+    inputMeasures[1].value = parseInt(Math.trunc(clientBox.height) * 0.8 * heightRatio);
+    inputMeasures[2].value = parseInt(x * widthRatio);
+    inputMeasures[3].value = parseInt(y * heightRatio);
+  }
+
+  let isStoring = false;
+  function storeImage(){
+    if(isStoring)
+      return;
+    isStoring = true;
+    displayElement(document.getElementsByClassName("loading-save")[0], true);
+    document.getElementById("storeImageCall").classList.add("disabled");
+
+    // Use the Real Canvas to work on the image
+    let realCanvas = document.getElementById("realCanvas");
+    let realContext = realCanvas.getContext('2d');
+    let imageFile = fileUpload.files[0];
+    let imageObject = new Image;
+    imageObject.onload = function(){
+        realCanvas.width = parseInt(inputMeasures[0].value);
+        realCanvas.height = parseInt(inputMeasures[1].value);
+        realContext.drawImage(imageObject, parseInt(inputMeasures[2].value), parseInt(inputMeasures[3].value), realCanvas.width, realCanvas.height, 0, 0, realCanvas.width, realCanvas.height);
+
+        let link = document.getElementById('downloadLink');
+        link.setAttribute('download', 'EditedImage.png');
+        link.setAttribute('href', realCanvas.toDataURL("image/png", 0.5).replace("image/png", "image/octet-stream"));
+
+        displayElement(document.getElementsByClassName("loading-save")[0], false);
+        document.getElementById("storeImageCall").classList.remove("disabled");
+        realCanvas.width = 5;
+        realCanvas.height = 5;
+        realContext.clearRect(0, 0, 5, 5);
+        link.click();
+        link.setAttribute('href', "#");
+        isStoring = false;
+    }
+    imageObject.src = URL.createObjectURL(imageFile);
+
+    // ////////////////////////////////////////
+  }
+</script>
+
+
+
+<script>
+  function dragMoveListener (event) {
+    let target = event.target
+    // keep the dragged position in the data-x/data-y attributes
+    let x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+    let y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+    // Translate the element
+    target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+
+    // Update the position attributes
+    target.setAttribute('data-x', x)
+    target.setAttribute('data-y', y)
+
+    // Input Measure
+    inputMeasures[2].value = parseInt(x * widthRatio);
+    inputMeasures[3].value = parseInt(y * heightRatio);
+  }
+
+  interact('.draggable-resizable')
+  .resizable({
+    // resize from all edges and corners
+    edges: { left: true, right: true, bottom: true, top: true },
+
+    listeners: {
+      move (event) {
+        var target = event.target
+        var x = (parseFloat(target.getAttribute('data-x')) || 0)
+        var y = (parseFloat(target.getAttribute('data-y')) || 0)
+
+        // update the element's style
+        target.style.width = event.rect.width + 'px'
+        target.style.height = event.rect.height + 'px'
+
         // translate when resizing from top or left edges
-        let x = Math.trunc(clientBox.width) * 0.1;
-        let y = Math.trunc(clientBox.height) * 0.1;
-        cropBox.style.transform = 'translate(' + x + "px," + y + "px)";
+        x += event.deltaRect.left
+        y += event.deltaRect.top
 
-        // Assign attribute for draggable events
-        cropBox.setAttribute("data-x", x);
-        cropBox.setAttribute("data-y", y);
+        target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
 
-        // Fill in correct values on the display:
-        inputMeasures[0].value = parseInt(Math.trunc(clientBox.width) * 0.8 * widthRatio);
-        inputMeasures[1].value = parseInt(Math.trunc(clientBox.height) * 0.8 * heightRatio);
-        inputMeasures[2].value = parseInt(x * widthRatio);
-        inputMeasures[3].value = parseInt(y * heightRatio);
-      }
-
-      let isStoring = false;
-      function storeImage(){
-        if(isStoring)
-          return;
-        isStoring = true;
-        displayElement(document.getElementsByClassName("loading-save")[0], true);
-        document.getElementById("storeImageCall").classList.add("disabled");
-
-        // Use the Real Canvas to work on the image
-        let realCanvas = document.getElementById("realCanvas");
-        let realContext = realCanvas.getContext('2d');
-        let imageFile = fileUpload.files[0];
-        let imageObject = new Image;
-        imageObject.onload = function(){
-            realCanvas.width = parseInt(inputMeasures[0].value);
-            realCanvas.height = parseInt(inputMeasures[1].value);
-            realContext.drawImage(imageObject, parseInt(inputMeasures[2].value), parseInt(inputMeasures[3].value), realCanvas.width, realCanvas.height, 0, 0, realCanvas.width, realCanvas.height);
-
-            let link = document.getElementById('downloadLink');
-            link.setAttribute('download', 'EditedImage.png');
-            link.setAttribute('href', realCanvas.toDataURL("image/png", 0.5).replace("image/png", "image/octet-stream"));
-
-            displayElement(document.getElementsByClassName("loading-save")[0], false);
-            document.getElementById("storeImageCall").classList.remove("disabled");
-            realCanvas.width = 5;
-            realCanvas.height = 5;
-            realContext.clearRect(0, 0, 5, 5);
-            link.click();
-            link.setAttribute('href', "#");
-            isStoring = false;
-        }
-        imageObject.src = URL.createObjectURL(imageFile);
-
-        // ////////////////////////////////////////
-      }
-    </script>
-
-
-
-    <script>
-      function dragMoveListener (event) {
-        let target = event.target
-        // keep the dragged position in the data-x/data-y attributes
-        let x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-        let y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-
-        // Translate the element
-        target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
-
-        // Update the position attributes
         target.setAttribute('data-x', x)
         target.setAttribute('data-y', y)
-
         // Input Measure
-        inputMeasures[2].value = parseInt(x * widthRatio);
-        inputMeasures[3].value = parseInt(y * heightRatio);
+        inputMeasures[0].value = Math.round(event.rect.width * widthRatio);
+        inputMeasures[1].value = Math.round(event.rect.height * heightRatio);
+        inputMeasures[2].value = Math.round(x * widthRatio);
+        inputMeasures[3].value = Math.round(y * heightRatio);
+        target.textContent = inputMeasures[0].value + '\u00D7' + inputMeasures[1].value
       }
+    },
+      modifiers: [
+        // keep the edges inside the parent
+        interact.modifiers.restrictEdges({
+          outer: 'parent'
+        }),
 
-      interact('.draggable-resizable')
-      .resizable({
-        // resize from all edges and corners
-        edges: { left: true, right: true, bottom: true, top: true },
-
-        listeners: {
-          move (event) {
-            var target = event.target
-            var x = (parseFloat(target.getAttribute('data-x')) || 0)
-            var y = (parseFloat(target.getAttribute('data-y')) || 0)
-
-            // update the element's style
-            target.style.width = event.rect.width + 'px'
-            target.style.height = event.rect.height + 'px'
-
-            // translate when resizing from top or left edges
-            x += event.deltaRect.left
-            y += event.deltaRect.top
-
-            target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
-
-            target.setAttribute('data-x', x)
-            target.setAttribute('data-y', y)
-            // Input Measure
-            inputMeasures[0].value = Math.round(event.rect.width * widthRatio);
-            inputMeasures[1].value = Math.round(event.rect.height * heightRatio);
-            inputMeasures[2].value = Math.round(x * widthRatio);
-            inputMeasures[3].value = Math.round(y * heightRatio);
-            target.textContent = inputMeasures[0].value + '\u00D7' + inputMeasures[1].value
-          }
-        },
-          modifiers: [
-            // keep the edges inside the parent
-            interact.modifiers.restrictEdges({
-              outer: 'parent'
-            }),
-
-            // minimum size
-            interact.modifiers.restrictSize({
-              min: { width: 100, height: 50 }
-            })
-          ],
-
-          inertia: true
+        // minimum size
+        interact.modifiers.restrictSize({
+          min: { width: 100, height: 50 }
         })
-        .draggable({
-          listeners: { move: dragMoveListener },
-          inertia: false,
-          modifiers: [
-            interact.modifiers.restrictRect({
-              restriction: 'parent',
-              endOnly: false
-            })
-          ]
+      ],
+
+      inertia: true
+    })
+    .draggable({
+      listeners: { move: dragMoveListener },
+      inertia: false,
+      modifiers: [
+        interact.modifiers.restrictRect({
+          restriction: 'parent',
+          endOnly: false
         })
-    </script>
-</html>
+      ]
+    })
+</script>
+{% endblock %}

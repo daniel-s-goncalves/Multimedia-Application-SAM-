@@ -11,6 +11,10 @@
 
 {% block uploadMessage %}We will load these images on the right and you will be able to specify your settings.{% endblock %}
 
+{% block inputBox %}
+  <input class="form-control" style="width: 15rem; margin: auto;" type="file" id="fileUpload" accept=".jpg, .jpeg, .png, .gif" multiple>
+{% endblock %}
+
 {% block editingFeatures %}
     <div class="mb-3 text-start mt-4">
     <div class="field-button d-flex justify-content-between align-items-center">
@@ -236,6 +240,9 @@
     document.getElementById("sendAnimatorCall").addEventListener("click", sendAnimatorCall);
 
     function sendAnimatorCall(){
+      displayElement(document.getElementsByClassName("loading-save")[0], true);
+      document.getElementById("sendAnimatorCall").classList.add("disabled");
+
       let formData = new FormData();
       Array.from(fileUpload.files).forEach((file, index) => {
         if( !(index < parseInt(startCropM.value) || index > parseInt(endCropM.value) ) )
@@ -258,6 +265,9 @@
               link.href = "data:text/plain;base64," + jsonResponse['imageFile'];
               link.download = "animatedImage" + jsonResponse['extension'];
               link.click();
+
+              displayElement(document.getElementsByClassName("loading-save")[0], false);
+              document.getElementById("sendAnimatorCall").classList.remove("disabled");
               document.body.removeChild(link);
               console.log("Terminated. Please, read from Server console to check the data sent.")
           }
