@@ -62,7 +62,7 @@ def videoEditor():
     # ##############################################
 
     if(extension == "DEF"):
-        extension = os.path.splitext(videoFile.filename)
+        extension = os.path.splitext(videoFile.filename)[1]
     
     print("Initiating video editing ...")
 
@@ -118,7 +118,7 @@ def videoEditor():
         clip.audio.write_audiofile(outputFilePath, logger=None)
     else:
         print("\t - Video Requested")
-        outputFilePath = "./" + tempFileName + "-t" +  os.path.splitext(videoFile.filename)[1]
+        outputFilePath = "./" + tempFileName + "-t" + str(extension)
         clip.write_videofile(outputFilePath, logger=None, preset = 'superfast')
 
     print("Process concluded!")
