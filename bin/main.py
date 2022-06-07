@@ -182,7 +182,7 @@ def animationUploadPage():
     
     ########### Acquire Durations #############
     durations = request.form.get("durations").split(",")
-    durations = [math.ceil( float(duration) / 10 + 20 ) for duration in durations]
+    durations = [math.ceil( float(duration)) for duration in durations]
     print(durations)
     print( len(durations) )
     ###########################################
