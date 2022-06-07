@@ -42,7 +42,8 @@ def videoUploadPage():
 def videoEditor():
     videoFile = request.files.get("file")
     tempFileName = generateFileName(25)
-    tempFileNameFull = "./" + tempFileName + os.path.splitext(videoFile.filename)[1]
+    fileExtension = os.path.splitext(videoFile.filename)[1]
+    tempFileNameFull = "./" + tempFileName + fileExtension
     videoFile.save(tempFileNameFull)
 
     # Load Variables #
@@ -65,8 +66,16 @@ def videoEditor():
     
     print("Initiating video editing ...")
 
-    clip = VideoFileClip(tempFileNameFull)
-
+    if(fileExtension == ".mp3"):
+        print("was an mp3")
+        clip = ColorClip(size=(200,100), color=(0,0,0), duration=duration)
+        clip.fps = 24
+        audio = AudioFileClip(tempFileNameFull)
+        clip.audio = audio
+    else:
+        print("not mp3")
+        clip = VideoFileClip(tempFileNameFull)
+        
     # Check if cropping occurred has been requested (and is valid)
     if(not (startCropping == 0 and endCropping == duration) and startCropping < endCropping):
         print("\t - Cropping Requested;")
@@ -76,7 +85,7 @@ def videoEditor():
     if(speed != 1):
         print("\t - Speed change Requested;")
         clip = clip.fx( vfx.speedx, speed)
-    
+        
     # Check if a scaling change was requested
     if(scaling < 1 and scaling >= 0.25):
         print("\t - Scaling Requested;")
@@ -89,7 +98,7 @@ def videoEditor():
     if(fadeOut > 0):
         print("\t - Fade Requested (Out);")
         clip = vfx.fadeout(clip, fadeOut)
-
+    
     soundClipStorage = clip.audio
     if(fadeInA > 0):
         print("\t - Audio Fade Requested (In);")
