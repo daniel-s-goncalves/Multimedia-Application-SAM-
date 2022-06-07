@@ -67,7 +67,6 @@ def videoEditor():
     print("Initiating video editing ...")
 
     if(fileExtension == ".mp3"):
-        print("was an mp3")
         clip = ColorClip(size=(200,100), color=(0,0,0), duration=duration)
         clip.fps = 24
         audio = AudioFileClip(tempFileNameFull)
@@ -115,7 +114,7 @@ def videoEditor():
 
     if(extension == ".mp3"):
         print("\t - Audio Requested")
-        outputFilePath = "./" + tempFileName + ".mp3"
+        outputFilePath = "./" + tempFileName + "-t" + ".mp3"
         clip.audio.write_audiofile(outputFilePath, logger=None)
     else:
         print("\t - Video Requested")
