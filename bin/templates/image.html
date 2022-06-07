@@ -170,9 +170,6 @@
 
 {% block previewElements %}
   <div class="mt-4 mb-4 preview-box">
-    <div id="cropZone" class="boundary-crop">
-      <div id="draggableBox" class="preview-topic draggable-resizable"></div>
-    </div>
     <canvas width="500" height="500" id="canvas" class="visually-hidden m-auto"/>
   </div>
 {% endblock %}
@@ -184,6 +181,7 @@
       Save Image
     </button>
   </a>
+  <canvas width="500" height="500" id="realCanvas" class="visually-hidden"/>
 {% endblock %}
 
 {% block scripts %}
