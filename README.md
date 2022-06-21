@@ -1,41 +1,59 @@
 # SAM - Multimedia Application
 
-# Important!!!
+## Running with Docker
 
-Installing 'Rubberband CLI' and 'ffmpeg' is explicitly required in order to let the server to make audio editions.
-
-You can install these libraries with 'homebrew' if you are using MAC OS:
+If you have Docker installed, then all you need to do to get your application running, is to simply run the `Dockerfile` in the root of this directory. This can be achieved by simply running the two following commands:
 
 ```
-brew install rubberband
+docker build --tag multimediaapp .
 ```
+
+```
+docker run -p 5000:5000 multimediaapp
+```
+
+By default, you will be able to access the web application through `http://localhost:5000/`. Take note that **this is the suggested way of starting the application** - If you do not do this, then you will need to separately install ffmpeg, which varies depending on your operating system.
+
+You can interrupt the docker container by running `docker stop $(docker ps -q --filter ancestor=multimediaapp )`
+
+## Running without Docker
+
+If you choose to avoid Docker, then installing 'ffmpeg' is explicitly required in order to let the server to make audio and video editions.
+
+### If you are using a MacOS device:
+You can install the library with 'homebrew'.
 
 ```
 brew install ffmpeg
 ```
 
-## Skip this step if you are not using Windows
+### If you are in a Linux OS:
+Simply run the following command:
 
-If you are using Windows you will need to download these libraries individually and add each of them to the PATH environment library.
+```
+sudo apt-get update && apt-get install -y ffmpeg
+```
 
-https://breakfastquay.com/rubberband/ - Click on 'Rubber Band Library v2.0.2 command-line utility' where it says Windows.
+### If you are in Windows:
+
+You will need to download the library individually and add it to the PATH environment library.
 
 https://www.gyan.dev/ffmpeg/builds/ - Select 'ffmpeg-git-full.7z'. 
 
-Remember you will need to extract and add the FOLDERS where the rubberband.exe and ffmpeg.exe files are to the PATH environment variable. 
+Remember you will need to extract and add the FOLDER where the fmpeg.exe file is to the PATH environment variable. 
 
-# Okay, I have installed these libraries. How do I run the server?
+### After installing FFMPEG in your system ...
 
-First, you will need to install all the required packages. In order to do this, simply type:
+You will need to install all the required python3 libraries. In order to do this, simply type (in the root directory of the project):
 
 ```
 pip3 install -r requirements.txt
 ```
 
-To run the application your terminal will need to be inside the directory of this same repository. After installing the **requirements** you will be able to activate the server by running the following command:
+After installing the **requirements** you will be able to activate the server by running the following command:
 
 ```
 python3 -m flask run
 ```
 
-By default, the website will be available through the following link ```http://localhost:5000/```
+Like in docker, by default, the website will be available through the following link ```http://localhost:5000/```
